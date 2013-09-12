@@ -42,9 +42,37 @@ class Plugin_Events_manager extends Plugin
 		return $info;
 	}
 	
-	public function test()
+	function display_timespan()
 	{
+		$start = $this->attribute('start');
+		$end = $this->attribute('end');
+		$date_format = $this->attribute('date_format', null);
+		$time_format = $this->attribute('time_format', null);
 		
+		// Formats
+		if(! $date_format) $date_format = 'F j, Y';
+		
+		if(! $time_format) $time_format = 'g:i a';
+		
+		// Same day?
+		if(date('Ymd', $start) == date('Ymd', $end))
+		{
+			$display[] = date($date_format, $start);
+			$display[] = 'from';
+			$display[] = date($time_format, $start);
+			$display[] = 'to';
+			$display[] = date($time_format, $end);
+		}
+		
+		// Multiple days. We won't show times
+		else
+		{
+			$display[] = date($date_format, $start);
+			$display[] = 'to';
+			$display[] = date($date_format, $end);
+		}
+		
+		return implode(' ', $display);
 	}
 
 }
