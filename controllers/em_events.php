@@ -32,36 +32,27 @@ class Em_events extends Public_Controller
 		$this->table->set_template(array('table_open'  => '<table>'));
     }
 
-	public function events($year = null, $month = null, $day = null, $offset = 0)
+	public function events($offset = 0)
 	{
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
 			'stream' => 'events',
 			'namespace' => 'events_manager',
-			'limit' => Settings::get('records_per_page'),
+			'limit' => 5, //Settings::get('records_per_page'),
 			'offset' => $offset,
 			'order_by' => 'start',
 			'sort' => 'asc',
 			'date_by' => 'start',
 			'show_past' => 'no',
 			'paginate' => 'yes',
-			'pag_segment' => 3
+			'pag_segment' => 2
 		);
-		
-		if($data->filters->month = $this->input->post('month'))
-		{
-			$params['month'] = $data->filters->month + 1;
-		}
-		
-		if($data->filters->year = $this->input->post('year'))
-		{
-			$params['year'] = $data->filters->year + 2013;
-		}
 		
 		$results = $this->streams->entries->get_entries($params);
 		
 		$this->template
+			->set('pagination', $results['pagination'])
 			->set('events', $results['entries'])
 			->build('front/list');
 	}

@@ -17,6 +17,8 @@
 	
 		{{ /events }}
 	</table>
+	
+	{{ pagination }}
 
 {{ else }}
 
