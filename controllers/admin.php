@@ -39,6 +39,8 @@ class Admin extends Admin_Controller
 
 	public function index($offset = 0)
 	{
+		if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
+		
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
@@ -51,7 +53,7 @@ class Admin extends Admin_Controller
 			'date_by' => 'start',
 			'show_past' => 'no',
 			'paginate' => 'yes',
-			'pag_segment' => 3
+			'pag_segment' => 4
 		);
 		
 		if($data->filters->month = $this->input->post('month'))
