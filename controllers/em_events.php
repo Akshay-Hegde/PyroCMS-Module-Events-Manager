@@ -96,17 +96,15 @@ class Em_events extends Public_Controller
 	
 	public function calendar($year = null, $month = null)
 	{
+		$event_list = array();
+		
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
 			'stream' => 'events',
 			'namespace' => 'events_manager',
 			'order_by' => 'start',
-			'sort' => 'asc',
 			'date_by' => 'start',
-			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_segment' => 3,
 			'month' => $month ? $month : date('n'),
 			'year' => $year ? $year : date('Y')
 		);
