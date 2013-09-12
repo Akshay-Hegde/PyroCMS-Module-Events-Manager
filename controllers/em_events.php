@@ -147,8 +147,8 @@ class Em_events extends Public_Controller
 		$next_month = $month == 12 ? 1 : $month + 1;
 		$next_year = $next_month == 1 ? $year + 1 : $year;
 		
-		$previous = anchor(site_url('calendar/'.$prev_year.'/'.$prev_month), '&larr;');
-		$next     = anchor(site_url('calendar/'.$next_year.'/'.$next_month), '&rarr;');
+		$previous = anchor(site_url('events/calendar/'.$prev_year.'/'.$prev_month), '&larr;');
+		$next     = anchor(site_url('events/calendar/'.$next_year.'/'.$next_month), '&rarr;');
 		
 		$prefs['template'] = '
 
