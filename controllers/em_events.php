@@ -66,6 +66,34 @@ class Em_events extends Public_Controller
 			->build('front/list');
 	}
 	
+	public function event($year, $month, $day, $slug)
+	{
+		// @todo Should we hope they don't have identical slugs on the same day?
+
+		$this->template->title('Event');
+		
+		$params = array(
+			'stream'    => 'events',
+			'namespace' => 'events_manager',
+			'limit'     => 1,
+			'date_by'   => 'start',
+			'where'     => "`slug` = '{$slug}'",
+			'year'      => $year,
+			'month'     => $month,
+			'day'       => $day
+		);
+		
+		$results = $this->streams->entries->get_entries($params);
+
+		list($event) = $results['entries'];
+		
+		// echo '<pre>'; print_r($event); die();
+
+		$this->template
+			->set('event', array($event))
+			->build('front/view');
+	}
+	
 	public function calendar()
 	{
 		
