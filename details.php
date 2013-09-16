@@ -89,6 +89,82 @@ class Module_Events_manager extends Module {
 	{
 		$this->load->driver('Streams');
 		
+		// Add Category colors
+		if(!$this->streams->streams->add_stream('Category Colors', 'category_colors', 'events_manager', 'em_', 'Colors for Event Categories')) return false;
+		
+		$fields = array(
+			array(
+				'name' => 'Color',
+				'slug' => 'color',
+				'namespace' => 'events_manager',
+				'type' => 'text',
+				'extra' => array('max_length' => 20),
+				'assign' => 'category_colors',
+				'title_column' => true,
+				'required' => true,
+				'unique' => true
+			),
+			array(
+				'name' => 'Hex',
+				'slug' => 'hex',
+				'namespace' => 'events_manager',
+				'type' => 'text',
+				'extra' => array('max_length' => 6),
+				'assign' => 'category_colors',
+				'title_column' => false,
+				'required' => true,
+				'unique' => true
+			)
+		);
+		
+		$this->streams->fields->add_fields($fields);
+		
+		$colors = array(
+			array(
+				'color' => 'Grey',
+				'hex' => '999999'
+			),
+			array(
+				'color' => 'Yellow',
+				'hex' => 'ffff0'
+			),
+			array(
+				'color' => 'Orange',
+				'hex' => 'ff9900'
+			),
+			array(
+				'color' => 'Purple',
+				'hex' => '000066'
+			),
+			array(
+				'color' => 'Red',
+				'hex' => 'ff0000'
+			),
+			array(
+				'color' => 'Green',
+				'hex' => '006600'
+			),
+			array(
+				'color' => 'Blue',
+				'hex' => '0000ff'
+			),
+			array(
+				'color' => 'Brown',
+				'hex' => '663300'
+			),
+			array(
+				'color' => 'Black',
+				'hex' => '000000'
+			)
+		);
+		
+		foreach($colors as $color)
+		{
+			$this->streams->entries->insert_entry($color, 'category_colors', 'events_manager');
+		}
+		
+		$category_colors_stream = $this->streams->streams->get_stream('category_colors', 'events_manager');
+		
 		// Add Categories
 		if(!$this->streams->streams->add_stream('Categories', 'categories', 'events_manager', 'em_', 'A list of categories')) return false;
 		
@@ -103,14 +179,26 @@ class Module_Events_manager extends Module {
 				'title_column' => true,
 				'required' => true,
 				'unique' => true
+			),
+			array(
+				'name' => 'Color',
+				'slug' => 'color_id',
+				'namespace' => 'events_manager',
+				'type' => 'relationship',
+				'extra' => array('choose_stream' => $category_colors_stream->id),
+				'assign' => 'categories',
+				'title_column' => false,
+				'required' => true
 			)
 		);
 		
 		$this->streams->fields->add_fields($fields);
 		
 		$entry_data = array(
-		        'category'  => 'No Category'
+		        'category'  => 'No Category',
+				'color_id' => 1
 		    );
+		
 		$this->streams->entries->insert_entry($entry_data, 'categories', 'events_manager');
 		
 		// Add Events
