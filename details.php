@@ -188,7 +188,8 @@ class Module_Events_manager extends Module {
 				'extra' => array('choose_stream' => $category_colors_stream->id),
 				'assign' => 'categories',
 				'title_column' => false,
-				'required' => true
+				'required' => true,
+				'unique' => true
 			)
 		);
 		
