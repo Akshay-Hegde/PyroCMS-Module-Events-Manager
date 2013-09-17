@@ -32,7 +32,7 @@ class Module_Events_manager extends Module {
 				)
 			),
 			'roles' => array(
-				'categories', 'custom_fields'
+				'categories', 'custom_fields', 'colors', 'settings'
 			)
 		);
 		
@@ -93,6 +93,14 @@ class Module_Events_manager extends Module {
 							'class' => 'add'
 						)
 					)
+				);
+			}
+			
+			if(group_has_role('events_manager', 'settings'))
+			{
+				$info['sections']['settings'] = array(
+					'name' 	=> 'events_manager:settings:title',
+					'uri' 	=> 'admin/events_manager/settings'
 				);
 			}
 		}
