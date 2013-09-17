@@ -1,5 +1,7 @@
 {{ if events }}
 
+	{{ template:title }}
+
 	{{ categories }}
 	
 		{{ category }}
