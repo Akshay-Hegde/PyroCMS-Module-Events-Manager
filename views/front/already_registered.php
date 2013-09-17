@@ -1,0 +1,1 @@
+<h4>Your are currently registered for this event.</h4>

@@ -16,4 +16,6 @@
 		</div>
 	</div>
 	
+	{{ template:partial name="registration" }}
+	
 {{ /event }}

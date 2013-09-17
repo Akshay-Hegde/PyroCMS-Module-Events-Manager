@@ -185,7 +185,7 @@ class Em_calendar extends Public_Controller
 		
 		if(isset($event_days))
 		{
-			if($this->settings->em_calendar_day_option == 'list')
+			if(Settings::get('em_calendar_day_option') == 'list')
 			{
 				foreach($event_days as $day => $event)
 				{

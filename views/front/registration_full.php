@@ -1,0 +1,1 @@
+<h4>Sorry, registration is full for this event.</h4>

@@ -169,10 +169,103 @@ class Em_events extends Public_Controller
 		
 		$results = $this->streams->entries->get_entries($params);
 
-		list($event) = $results['entries'];
+		list($event) = $results['entries']; // echo '<pre>'; print_r($event); die();
 		
-		$this->template
-			->set('event', array($event))
-			->build('front/view');
+		if($event['registration']['key'] == 'yes')
+		{
+			$params = array(
+				'stream' => 'registrations',
+				'namespace' => 'events_manager',
+				'where' => "`event_id` = " . $event['id']
+			);
+			
+			$registrations = $this->streams->entries->get_entries($params);
+			
+			if($registrations['total'] < $event['limit'])
+			{
+				$validation_rules = array(
+					array(
+						'field' => 'name',
+						'label' => 'Name',
+						'rules'	=> 'required'
+					),
+					array(
+						'field' => 'email',
+						'label' => 'Email',
+						'rules'	=> 'valid_email|required'
+					)
+				);
+
+				$this->form_validation->set_rules($validation_rules);
+
+				if($this->form_validation->run())
+				{
+					$name = $this->input->post('name');
+					$email = $this->input->post('email');
+					$is_registered = false;
+					
+					foreach($registrations['entries'] as $registration)
+					{
+						if($registration['email'] == $email) $is_registered = true;
+					}
+					
+					if($is_registered)
+					{
+						$this->template
+							->set_partial('registration', 'front/already_registered')
+							->set('event', array($event))
+							->build('front/view');
+					}
+					else
+					{
+						$entry = array(
+							'event_id' => $event['id'],
+							'name' => $name,
+							'email' => $email
+						);
+						
+						// @todo Add verification
+						$insert = $this->streams->entries->insert_entry($entry, 'registrations', 'events_manager');
+						
+						if($insert)
+						{
+							$this->template->set_partial('registration', 'front/registration_success')
+							->set('event', array($event))
+							->build('front/view');
+						}
+					}
+
+				}
+				else
+				{
+					$this->template
+						->set_partial('registration', 'front/registration_form')
+						->set('form_open', form_open())
+						->set('form_close', form_close())
+						->set('name', $this->input->post('name'))
+						->set('email', $this->input->post('email'))
+						->set('validation_errors', validation_errors())
+						->set('event', array($event))
+						->build('front/view');
+				}
+			}
+			else
+			{
+				$this->template
+					->set_partial('registration', 'front/registration_full')
+					->set('event', array($event))
+					->build('front/view');
+			}
+			
+		}
+		else
+		{
+			$this->template
+				->set('event', array($event))
+				->build('front/view');
+		}
+		
+		
+
 	}
 }
