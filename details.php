@@ -120,6 +120,17 @@ class Module_Events_manager extends Module {
 				'unique' => true
 			),
 			array(
+				'name' => 'Slug',
+				'slug' => 'color_slug',
+				'namespace' => 'events_manager',
+				'type' => 'slug',
+				'extra' => array('space_type' => '-', 'slug_field' => 'color'),
+				'assign' => 'category_colors',
+				'title_column' => false,
+				'required' => true,
+				'unique' => true
+			),
+			array(
 				'name' => 'Hex',
 				'slug' => 'hex',
 				'namespace' => 'events_manager',
@@ -192,6 +203,17 @@ class Module_Events_manager extends Module {
 				'extra' => array('max_length' => 50),
 				'assign' => 'categories',
 				'title_column' => true,
+				'required' => true,
+				'unique' => true
+			),
+			array(
+				'name' => 'Slug',
+				'slug' => 'category_slug',
+				'namespace' => 'events_manager',
+				'type' => 'slug',
+				'extra' => array('space_type' => '-', 'slug_field' => 'category'),
+				'assign' => 'categories',
+				'title_column' => false,
 				'required' => true,
 				'unique' => true
 			),
