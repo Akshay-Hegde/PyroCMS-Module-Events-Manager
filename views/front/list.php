@@ -1,5 +1,11 @@
 {{ if events }}
 
+	{{ categories }}
+	
+		{{ category }}
+		
+	{{ /categories }}
+
 	<table class="table">
 		<tr>
 			<th>Date</th>

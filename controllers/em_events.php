@@ -11,6 +11,8 @@
 
 class Em_events extends Public_Controller
 {
+	private $categories;
+	
     public function __construct()
     {
         parent::__construct();
@@ -38,18 +40,12 @@ class Em_events extends Public_Controller
 		);
 
 		$categories = $this->streams->entries->get_entries($params);
-		
-		foreach($categories['entries'] as $category)
-		{
-			echo '<pre>'; print_r($category);
-			$this->categories[$category['slug']] = $category['category'];
-		}
+		$this->categories = $categories['entries'];
+		$this->template->set('categories', $this->categories);
     }
 
-	public function events($category = null, $offset = 0)
+	public function events($selected_category = null, $offset = 0)
 	{
-		if( ! $category) redirect('events/all');
-		
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
@@ -65,13 +61,21 @@ class Em_events extends Public_Controller
 			'pag_segment' => 3
 		);
 		
-		if($category != 'all')
+		if(! $selected_category)
 		{
-			if(! array_key_exists($category, $this->categories)) redirect('events/all');
-			
-			$this->template->title('Upcoming Events listed as "' . $category->category . '"');
-			$params['where'] = "`category` = '{$category}'";
-			
+			$params['pag_seqment'] = 2;
+		}
+		else
+		{
+			foreach($this->categories as $category)
+			{
+				if($category['category_slug'] == $selected_category)
+				{
+					$this->template->title('Upcoming Events listed as "' . $category['category'] . '"');
+					$id = $category['id'];
+					$params['where'] = "`category_id` = '{$id}'";
+				}
+			}
 		}
 		
 		$results = $this->streams->entries->get_entries($params);
