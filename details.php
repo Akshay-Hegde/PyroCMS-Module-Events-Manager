@@ -357,23 +357,12 @@ class Module_Events_manager extends Module {
 		
 		$this->streams->fields->add_fields($fields);
 		
-		// Add Events
+		// Add Registrations
 		if(!$this->streams->streams->add_stream('Registrations', 'registrations', 'events_manager', 'em_', 'Registrations')) return false;
 		
 		$events_stream = $this->streams->streams->get_stream('events', 'events_manager');
-		$users_stream = $this->streams->streams->get_stream('profiles', 'users');
 		
 		$fields = array(
-			array(
-				'name' => 'User',
-				'slug' => 'user_id',
-				'namespace' => 'events_manager',
-				'type' => 'relationship',
-				'extra' => array('choose_stream' => $users_stream->id),
-				'assign' => 'registrations',
-				'title_column' => false,
-				'required' => false
-			),
 			array(
 				'name' => 'Event',
 				'slug' => 'event_id',
@@ -382,7 +371,7 @@ class Module_Events_manager extends Module {
 				'extra' => array('choose_stream' => $events_stream->id),
 				'assign' => 'registrations',
 				'title_column' => false,
-				'required' => false
+				'required' => true
 			),
 			array(
 				'name' => 'Name',
@@ -392,7 +381,7 @@ class Module_Events_manager extends Module {
 				'extra' => array('max_length' => 100),
 				'assign' => 'registrations',
 				'title_column' => false,
-				'required' => false,
+				'required' => true,
 				'unique' => false
 			),
 			array(
@@ -403,7 +392,7 @@ class Module_Events_manager extends Module {
 				'extra' => array('max_length' => 255),
 				'assign' => 'registrations',
 				'title_column' => false,
-				'required' => false,
+				'required' => true,
 				'unique' => false
 			)
 		);
