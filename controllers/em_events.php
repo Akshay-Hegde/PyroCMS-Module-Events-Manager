@@ -58,7 +58,7 @@ class Em_events extends Public_Controller
 			'date_by' => 'start',
 			'show_past' => 'no',
 			'paginate' => 'yes',
-			'pag_segment' => 3
+			'pag_segment' => 3,
 		);
 		
 		if(! $selected_category)
@@ -114,9 +114,12 @@ class Em_events extends Public_Controller
 			->build('front/view');
 	}
 	
-	public function calendar($year = null, $month = null)
+	public function calendar($year = null, $month = null, $selected_category = 'all')
 	{
 		$event_list = array();
+		
+		$month = $month ? $month : date('n');
+		$year = $year ? $year : date('Y');
 		
 		$this->template->title('Upcoming Events');
 		
@@ -125,9 +128,23 @@ class Em_events extends Public_Controller
 			'namespace' => 'events_manager',
 			'order_by' => 'start',
 			'date_by' => 'start',
-			'month' => $month ? $month : date('n'),
-			'year' => $year ? $year : date('Y')
+			'month' => $month,
+			'year' => $year
 		);
+
+		if($selected_category != 'all')
+		{
+			// @todo DRY
+			foreach($this->categories as $category)
+			{
+				if($category['category_slug'] == $selected_category)
+				{
+					$this->template->title('Upcoming Events listed as "' . $category['category'] . '"');
+					$id = $category['id'];
+					$params['where'] = "`category_id` = '{$id}'";
+				}
+			}
+		}
 		
 		$results = $this->streams->entries->get_entries($params);
 		
@@ -167,8 +184,8 @@ class Em_events extends Public_Controller
 		$next_month = $month == 12 ? 1 : $month + 1;
 		$next_year = $next_month == 1 ? $year + 1 : $year;
 		
-		$previous = anchor(site_url('events/calendar/'.$prev_year.'/'.$prev_month), '&larr;');
-		$next     = anchor(site_url('events/calendar/'.$next_year.'/'.$next_month), '&rarr;');
+		$previous = anchor(site_url('events/calendar/'.$prev_year.'/'.$prev_month.'/'.$selected_category), '&larr;');
+		$next     = anchor(site_url('events/calendar/'.$next_year.'/'.$next_month.'/'.$selected_category), '&rarr;');
 		
 		$prefs['template'] = '
 
