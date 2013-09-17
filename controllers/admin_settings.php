@@ -39,7 +39,7 @@ class Admin_settings extends Admin_Controller
 
 	public function index()
 	{
-		
+		$this->template->build('admin/settings/index');
 	}
 
 }

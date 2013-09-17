@@ -1,0 +1,1 @@
+<div class="no_data">Settings for this module are currently located in the <a href="<?php echo site_url('admin/settings') ?>">global settings panel</a>.</div>
