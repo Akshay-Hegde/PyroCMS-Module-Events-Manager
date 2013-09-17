@@ -30,10 +30,26 @@ class Em_events extends Public_Controller
 		
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
+		
+		// We always need the category list as a keyed array
+		$params = array(
+			'stream' => 'categories',
+			'namespace' => 'events_manager',
+		);
+
+		$categories = $this->streams->entries->get_entries($params);
+		
+		foreach($categories['entries'] as $category)
+		{
+			echo '<pre>'; print_r($category);
+			$this->categories[$category['slug']] = $category['category'];
+		}
     }
 
-	public function events($offset = 0)
+	public function events($category = null, $offset = 0)
 	{
+		if( ! $category) redirect('events/all');
+		
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
@@ -46,8 +62,17 @@ class Em_events extends Public_Controller
 			'date_by' => 'start',
 			'show_past' => 'no',
 			'paginate' => 'yes',
-			'pag_segment' => 2
+			'pag_segment' => 3
 		);
+		
+		if($category != 'all')
+		{
+			if(! array_key_exists($category, $this->categories)) redirect('events/all');
+			
+			$this->template->title('Upcoming Events listed as "' . $category->category . '"');
+			$params['where'] = "`category` = '{$category}'";
+			
+		}
 		
 		$results = $this->streams->entries->get_entries($params);
 		
