@@ -126,10 +126,23 @@ class Em_calendar extends Public_Controller
 			$event = (object) $event;
 			
 			$event_day = date('j', $event->start);
+			
+			// We need the color
+			$color_id = $event->category_id['color_id'];
+			
+			$params = array(
+				'stream' => 'category_colors',
+				'namespace' => 'events_manager',
+				'where' => "`id` = '{$color_id}'"
+			);
+
+			$results = $this->streams->entries->get_entries($params);
+			$color = $results['entries'][0];
 
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
-				'url' => site_url('events_manager/event' . date('/Y/m/d/', $event->start) . $event->slug)
+				'url' => site_url('events_manager/event' . date('/Y/m/d/', $event->start) . $event->slug),
+				'color_slug' => $color['color_slug']
 			);
 		}
 		

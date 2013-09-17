@@ -63,9 +63,28 @@ class Em_events extends Public_Controller
 		
 		$results = $this->streams->entries->get_entries($params);
 		
+		// Need colors
+		// @todo DRY
+		foreach($results['entries'] as $event)
+		{
+			$id = $event['category_id']['color_id'];
+			
+			$params = array(
+				'stream' => 'category_colors',
+				'namespace' => 'events_manager',
+				'where' => "`id` = '{$id}'"
+			);
+
+			$color = $this->streams->entries->get_entries($params);
+			
+			$event['color_slug'] = $color['entries'][0]['color_slug'];
+			
+			$events[] = $event;
+		}
+		
 		$this->template
 			->set('pagination', $results['pagination'])
-			->set('events', $results['entries'])
+			->set('events', $events)
 			->build('front/list');
 	}
 	
@@ -103,9 +122,27 @@ class Em_events extends Public_Controller
 			$results = $this->streams->entries->get_entries($params);
 		}
 		
+		// Need colors
+		foreach($results['entries'] as $event)
+		{
+			$id = $event['category_id']['color_id'];
+			
+			$params = array(
+				'stream' => 'category_colors',
+				'namespace' => 'events_manager',
+				'where' => "`id` = '{$id}'"
+			);
+
+			$color = $this->streams->entries->get_entries($params);
+			
+			$event['color_slug'] = $color['entries'][0]['color_slug'];
+			
+			$events[] = $event;
+		}
+		
 		$this->template
 			->set('pagination', $results['pagination'])
-			->set('events', $results['entries'])
+			->set('events', $events)
 			->build('front/list');
 	}
 	

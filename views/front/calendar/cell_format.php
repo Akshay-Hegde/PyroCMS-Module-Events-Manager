@@ -3,7 +3,7 @@
 	<ul class="list list-unstyled">
 		{{ events }}
 		
-			<li><a href="{{ url }}">{{ title }}</a></li>
+			<li><a href="{{ url }}" style="color: {{ color_slug }};">{{ title }}</a></li>
 			
 		{{ /events }}
 	</ul>
