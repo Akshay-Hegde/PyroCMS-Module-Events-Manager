@@ -141,7 +141,7 @@ class Module_Events_manager extends Module {
 			),
 			array(
 				'color' => 'Yellow',
-				'hex' => 'ffff0'
+				'hex' => 'ffff00'
 			),
 			array(
 				'color' => 'Orange',
