@@ -27,7 +27,7 @@ $route['(events_manager)/event(/:any)'] = 'em_events/event$2';
 
 $route['(events_manager)/calendar'] = 'em_calendar/index';
 $route['(events_manager)/calendar/category(/:any)'] = 'em_calendar/category$2';
-$route['(events_manager)/calendar/(:num)/(:num)'] = 'em_calendar/index/$2/$3';
+$route['(events_manager)/calendar/(:num)/(:num)/(:num)'] = 'em_calendar/index/$2/$3/$4';
 
 // admin
 $route['events_manager/admin/categories(/:any)?'] = 'admin_categories$1';

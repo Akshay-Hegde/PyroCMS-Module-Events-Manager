@@ -44,7 +44,7 @@ class Em_calendar extends Public_Controller
 		$this->template->set('categories', $this->categories);
     }
 	
-	public function index($year = null, $month = null)
+	public function index($year = null, $month = null, $day = null)
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
@@ -60,15 +60,51 @@ class Em_calendar extends Public_Controller
 			'year' => $year
 		);
 		
-		$results = $this->streams->entries->get_entries($params);
-		
-		$events = $results['entries'];
-		
-		$data = $this->_build($events, $year, $month);
+		if($day)
+		{
+			// @todo format setting
+			$this->template->title('Events for ' . date('M i, Y'));
+			
+			$params['day'] = $day;
+			
+			$results = $this->streams->entries->get_entries($params);
+			
+			// Need colors
+			// @todo DRY
+			foreach($results['entries'] as $event)
+			{
+				$id = $event['category_id']['color_id'];
 
-		$this->template
-			->set_layout('default.html')
-			->build('front/calendar/view', $data);
+				$params = array(
+					'stream' => 'category_colors',
+					'namespace' => 'events_manager',
+					'where' => "`id` = '{$id}'"
+				);
+
+				$color = $this->streams->entries->get_entries($params);
+
+				$event['color_slug'] = $color['entries'][0]['color_slug'];
+
+				$events[] = $event;
+			}
+
+			$this->template
+				->set('events', $events)
+				->build('front/list');
+		}
+		else
+		{
+			$results = $this->streams->entries->get_entries($params);
+
+			$events = $results['entries'];
+
+			$data = $this->_build($events, $year, $month);
+
+			$this->template
+				->set_layout('default.html')
+				->build('front/calendar/view', $data);
+		}
+		
 	}
 	
 	public function category($slug = '', $year = null, $month = null)
