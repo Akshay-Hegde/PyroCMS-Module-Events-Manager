@@ -148,39 +148,48 @@ class Module_Events_manager extends Module {
 		$colors = array(
 			array(
 				'color' => 'Grey',
-				'hex' => '999999'
+				'hex' => '999999',
+				'slugs' => 'grey'
 			),
 			array(
 				'color' => 'Yellow',
-				'hex' => 'ffff00'
+				'hex' => 'ffff00',
+				'slugs' => 'yellow'
 			),
 			array(
 				'color' => 'Orange',
-				'hex' => 'ff9900'
+				'hex' => 'ff9900',
+				'slugs' => 'orange'
 			),
 			array(
 				'color' => 'Purple',
-				'hex' => '000066'
+				'hex' => '000066',
+				'slugs' => 'purple'
 			),
 			array(
 				'color' => 'Red',
-				'hex' => 'ff0000'
+				'hex' => 'ff0000',
+				'slugs' => 'red'
 			),
 			array(
 				'color' => 'Green',
-				'hex' => '006600'
+				'hex' => '006600',
+				'slugs' => 'green'
 			),
 			array(
 				'color' => 'Blue',
-				'hex' => '0000ff'
+				'hex' => '0000ff',
+				'slugs' => 'blue'
 			),
 			array(
 				'color' => 'Brown',
-				'hex' => '663300'
+				'hex' => '663300',
+				'slugs' => 'brown'
 			),
 			array(
 				'color' => 'Black',
-				'hex' => '000000'
+				'hex' => '000000',
+				'slugs' => 'black'
 			)
 		);
 		
@@ -234,7 +243,8 @@ class Module_Events_manager extends Module {
 		
 		$entry_data = array(
 		        'category'  => 'No Category',
-				'color_id' => 1
+				'color_id' => 1,
+				'slug' => 'no-category'
 		    );
 		
 		$this->streams->entries->insert_entry($entry_data, 'categories', 'events_manager');
