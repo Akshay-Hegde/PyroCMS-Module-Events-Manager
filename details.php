@@ -412,6 +412,7 @@ class Module_Events_manager extends Module {
 		// Ok, now for some settings
 		
 		$em_setting = array(
+			array(
 				'slug' => 'em_default_view',
 				'title' => 'Default View',
 				'description' => 'Calendar or list view.',
@@ -422,10 +423,22 @@ class Module_Events_manager extends Module {
 				'is_required' => 1,
 				'is_gui' => 1,
 				'module' => 'events_manager'
-			);
-
+			),
+			array(
+				'slug' => 'em_calendar_day_option',
+				'title' => 'Calendar day option',
+				'description' => 'Show a list of events on the days in the calendar view or just link to the day view.',
+				'`default`' => 'list',
+				'`value`' => 'list',
+				'type' => 'select',
+				'`options`' => 'list=Show Events|link=Link to Day View',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager'
+			)
+		);
 		// Let's try running our DB Forge Table and inserting some settings
-		if ( ! $this->db->insert('settings', $em_setting))
+		if ( ! $this->db->insert_batch('settings', $em_setting))
 		{
 			return false;
 		}

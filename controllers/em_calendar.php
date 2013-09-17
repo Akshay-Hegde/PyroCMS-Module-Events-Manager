@@ -177,23 +177,39 @@ class Em_calendar extends Public_Controller
 
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
-				'url' => site_url('events_manager/event' . date('/Y/m/d/', $event->start) . $event->slug),
+				'start' => $event->start,
+				'slug' => $event->slug,
 				'color_slug' => $color['color_slug']
 			);
 		}
 		
-		// Consolidate events into uls and assign to a day
 		if(isset($event_days))
 		{
-			foreach($event_days as $day => $event)
+			if($this->settings->em_calendar_day_option == 'list')
 			{
-				$cell = $this->template
-					->set_layout(null)
-					->set('events', $event_days[$day])
-					->set('day', $day)
-					->build('front/calendar/cell_format', '', true);
-					
-				$event_list[$day] = $cell;
+				foreach($event_days as $day => $event)
+				{
+					$cell = $this->template
+						->set_layout(null)
+						->set('events', $event_days[$day])
+						->set('day', $day)
+						->build('front/calendar/cell_format_list', '', true);
+
+					$event_list[$day] = $cell;
+				}
+			}
+			else
+			{
+				foreach($event_days as $day => $event)
+				{ // print_r($event_days[$day]); die();
+					$cell = $this->template
+						->set_layout(null)
+						->set('events', array($event_days[$day][0]))
+						->set('day', $day)
+						->build('front/calendar/cell_format_link', '', true);
+
+					$event_list[$day] = $cell;
+				}
 			}
 		}
 
