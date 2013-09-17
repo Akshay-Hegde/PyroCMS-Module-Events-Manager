@@ -54,7 +54,7 @@ class Admin_categories extends Admin_Controller
 				)
 			),
 			
-			'columns' => array('category')
+			'columns' => array('category', 'color_id')
 		);
 		
 		$this->streams->cp->entries_table('categories', 'events_manager', 20, 'admin/events_manager/categories', true, $extra);
