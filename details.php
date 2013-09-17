@@ -326,7 +326,7 @@ class Module_Events_manager extends Module {
 				'slug' => 'registration',
 				'namespace' => 'events_manager',
 				'type' => 'choice',
-				'extra' => array('choice_data' => 'Yes', 'choice_type' => 'checkboxes'),
+				'extra' => array('choice_data' => "yes : Yes\nno : No", 'choice_type' => 'radio', 'default_value' => 'no'),
 				'assign' => 'events',
 				'title_column' => false,
 				'required' => false,

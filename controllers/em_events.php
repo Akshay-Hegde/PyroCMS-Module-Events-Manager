@@ -46,6 +46,8 @@ class Em_events extends Public_Controller
 
 	public function index()
 	{
+		$events = array();
+		
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
