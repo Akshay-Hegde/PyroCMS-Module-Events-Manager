@@ -9,7 +9,7 @@
  * @package 	PyroCMS
  */
 
-class Em_events extends Public_Controller
+class Em_calendar extends Public_Controller
 {
 	private $categories;
 	
@@ -43,34 +43,39 @@ class Em_events extends Public_Controller
 		$this->categories = $categories['entries'];
 		$this->template->set('categories', $this->categories);
     }
-
-	public function index()
+	
+	public function index($year = null, $month = null)
 	{
+		$month = $month ? $month : date('n');
+		$year = $year ? $year : date('Y');
+
 		$this->template->title('Upcoming Events');
 		
 		$params = array(
 			'stream' => 'events',
 			'namespace' => 'events_manager',
-			'limit' => 2, //Settings::get('records_per_page'),
 			'order_by' => 'start',
-			'sort' => 'asc',
 			'date_by' => 'start',
-			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_base' => site_url('events_manager/events/page'),
-			'pag_segment' => 4
+			'month' => $month,
+			'year' => $year
 		);
 		
 		$results = $this->streams->entries->get_entries($params);
 		
+		$events = $results['entries'];
+		
+		$data = $this->_build($events, $year, $month);
+
 		$this->template
-			->set('pagination', $results['pagination'])
-			->set('events', $results['entries'])
-			->build('front/list');
+			->set_layout('default.html')
+			->build('front/calendar/view', $data);
 	}
 	
-	public function category($slug = '')
+	public function category($slug = '', $year = null, $month = null)
 	{
+		$month = $month ? $month : date('n');
+		$year = $year ? $year : date('Y');
+		
 		// Exists?
 		$params = array(
 			'stream' => 'categories',
@@ -84,92 +89,36 @@ class Em_events extends Public_Controller
 		{
 			$category = $results['entries'][0];
 			
+			$this->template->title('Calendar Events listed as "' . $category['category'] . '"');
+			$id = $category['id'];
+			
 			$params = array(
 				'stream' => 'events',
 				'namespace' => 'events_manager',
-				'limit' => 2, //Settings::get('records_per_page'),
 				'order_by' => 'start',
-				'sort' => 'asc',
 				'date_by' => 'start',
-				'show_past' => 'no',
-				'paginate' => 'yes',
-				'pag_segment' => 5
+				'month' => $month,
+				'year' => $year,
+				'where' => "`category_id` = '{$id}'"
 			);
 
-			$this->template->title('Upcoming Events listed as "' . $category['category'] . '"');
-			$id = $category['id'];
-			$params['where'] = "`category_id` = '{$id}'";
+			$results = $this->streams->entries->get_entries($params);
 
+			$events = $results['entries'];
+			
 			$results = $this->streams->entries->get_entries($params);
 		}
 		
-		$this->template
-			->set('pagination', $results['pagination'])
-			->set('events', $results['entries'])
-			->build('front/list');
-	}
-	
-	public function event($year, $month, $day, $slug)
-	{
-		// @todo Should we hope they don't have identical slugs on the same day?
-
-		$this->template->title('Event');
-		
-		$params = array(
-			'stream'    => 'events',
-			'namespace' => 'events_manager',
-			'limit'     => 1,
-			'date_by'   => 'start',
-			'where'     => "`slug` = '{$slug}'",
-			'year'      => $year,
-			'month'     => $month,
-			'day'       => $day
-		);
-		
-		$results = $this->streams->entries->get_entries($params);
-
-		list($event) = $results['entries'];
+		$data = $this->_build($events, $year, $month, $slug);
 		
 		$this->template
-			->set('event', array($event))
-			->build('front/view');
+			->set_layout('default.html')
+			->build('front/calendar/view', $data);
 	}
 	
-	public function calendar($year = null, $month = null, $selected_category = 'all')
+	private function _build($events, $year, $month, $category = null)
 	{
 		$event_list = array();
-		
-		$month = $month ? $month : date('n');
-		$year = $year ? $year : date('Y');
-		
-		$this->template->title('Upcoming Events');
-		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'events_manager',
-			'order_by' => 'start',
-			'date_by' => 'start',
-			'month' => $month,
-			'year' => $year
-		);
-
-		if($selected_category != 'all')
-		{
-			// @todo DRY
-			foreach($this->categories as $category)
-			{
-				if($category['category_slug'] == $selected_category)
-				{
-					$this->template->title('Upcoming Events listed as "' . $category['category'] . '"');
-					$id = $category['id'];
-					$params['where'] = "`category_id` = '{$id}'";
-				}
-			}
-		}
-		
-		$results = $this->streams->entries->get_entries($params);
-		
-		$events = $results['entries'];
 		
 		// Assign events to keyed array ex. $var[4] = array(event1, event2, etc.)
 		foreach($events as $event)
@@ -180,7 +129,7 @@ class Em_events extends Public_Controller
 
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
-				'url' => site_url('event' . date('/Y/m/d/', $event->start) . $event->slug)
+				'url' => site_url('events_manager/event' . date('/Y/m/d/', $event->start) . $event->slug)
 			);
 		}
 		
@@ -205,8 +154,16 @@ class Em_events extends Public_Controller
 		$next_month = $month == 12 ? 1 : $month + 1;
 		$next_year = $next_month == 1 ? $year + 1 : $year;
 		
-		$previous = anchor(site_url('events/calendar/'.$prev_year.'/'.$prev_month.'/'.$selected_category), '&larr;');
-		$next     = anchor(site_url('events/calendar/'.$next_year.'/'.$next_month.'/'.$selected_category), '&rarr;');
+		if($category)
+		{
+			$previous = anchor(site_url('events_manager/calendar/category/'.$category.'/'.$prev_year.'/'.$prev_month), '&larr;');
+			$next     = anchor(site_url('events_manager/calendar/category/'.$category.'/'.$next_year.'/'.$next_month), '&rarr;');
+		}
+		else
+		{
+			$previous = anchor(site_url('events_manager/calendar/'.$prev_year.'/'.$prev_month), '&larr;');
+			$next     = anchor(site_url('events_manager/calendar/'.$next_year.'/'.$next_month), '&rarr;');
+		}
 		
 		$prefs['template'] = '
 
@@ -242,13 +199,11 @@ class Em_events extends Public_Controller
 		$prefs['day_type']     = 'long';
 
 		$this->load->library('calendar', $prefs);
-
+		
 		$data->month = $month;
 		$data->year = $year;
 		$data->event_list = $event_list;
-
-		$this->template
-			->set_layout('default.html')
-			->build('front/calendar/view', $data);
+		
+		return $data;
 	}
 }

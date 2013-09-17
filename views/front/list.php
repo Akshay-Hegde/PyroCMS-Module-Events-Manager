@@ -19,7 +19,7 @@
 	
 		<tr>
 			<td>{{ events_manager:display_timespan start=start end=end }}</td>
-			<td><a href="{{ url:site }}event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}">{{ title }}</a></td>
+			<td><a href="{{ url:site }}events_manager/event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}">{{ title }}</a></td>
 			<td>{{ location }}</td>
 		</tr>
 	
