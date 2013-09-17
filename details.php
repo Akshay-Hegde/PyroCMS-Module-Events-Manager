@@ -80,6 +80,21 @@ class Module_Events_manager extends Module {
 					)
 				);
 			}
+			
+			if(group_has_role('events_manager', 'colors'))
+			{
+				$info['sections']['colors'] = array(
+					'name' 	=> 'events_manager:colors:title',
+					'uri' 	=> 'admin/events_manager/colors',
+					'shortcuts' => array(
+						'create' => array(
+							'name' 	=> 'events_manager:colors:add',
+							'uri' 	=> 'admin/events_manager/colors/form',
+							'class' => 'add'
+						)
+					)
+				);
+			}
 		}
 		
 		return $info;

@@ -23,4 +23,5 @@
 // admin
 $route['events_manager/admin/categories(/:any)?'] = 'admin_categories$1';
 $route['events_manager/admin/fields(/:any)?'] = 'admin_fields$1';
+$route['events_manager/admin/colors(/:any)?'] = 'admin_colors$1';
 $route['events_manager/admin(/:any)?'] = 'admin$1';
