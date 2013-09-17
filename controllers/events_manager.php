@@ -22,7 +22,8 @@ class Events_manager extends Public_Controller
 
 		// @todo Use defaults in settings to redirct to either
 		// list or calendar view
-		redirect('events_manager/calendar');
+		
+		redirect('events_manager/' . Settings::get('em_default_view'));
     }
 
 	public function index()

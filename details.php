@@ -111,6 +111,8 @@ class Module_Events_manager extends Module {
 	public function install()
 	{
 		$this->load->driver('Streams');
+		$this->streams->utilities->remove_namespace('events_manager');
+		$this->db->delete('settings', array('module' => 'events_manager'));
 		
 		// Add Category colors
 		if(!$this->streams->streams->add_stream('Category Colors', 'category_colors', 'events_manager', 'em_', 'Colors for Event Categories')) return false;
@@ -406,6 +408,27 @@ class Module_Events_manager extends Module {
 		);
 		
 		$this->streams->fields->add_fields($fields);
+		
+		// Ok, now for some settings
+		
+		$em_setting = array(
+				'slug' => 'em_default_view',
+				'title' => 'Default View',
+				'description' => 'Calendar or list view.',
+				'`default`' => 'calendar',
+				'`value`' => 'calendar',
+				'type' => 'select',
+				'`options`' => 'calendar=Calendar|events=List',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager'
+			);
+
+		// Let's try running our DB Forge Table and inserting some settings
+		if ( ! $this->db->insert('settings', $em_setting))
+		{
+			return false;
+		}
 			
 		return true;
 	}
@@ -415,6 +438,7 @@ class Module_Events_manager extends Module {
 		$this->load->driver('Streams');
 
         $this->streams->utilities->remove_namespace('events_manager');
+		$this->db->delete('settings', array('module' => 'events_manager'));
 
         return true;
 	}
