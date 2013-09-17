@@ -1,12 +1,14 @@
 {{ if events }}
 
-	{{ template:title }}
+<h1>{{ template:title }}</h1>
 
-	{{ categories }}
+<ul>
+{{ categories }}
+
+	<li><a href="{{ url:site uri="events_manager/events/category" }}/{{ category_slug }}">{{ category }}</a></li>
 	
-		{{ category }}
-		
-	{{ /categories }}
+{{ /categories }}
+</ul>
 
 	<table class="table">
 		<tr>
