@@ -90,6 +90,8 @@ class Em_events extends Public_Controller
 	
 	public function category($slug = '')
 	{
+		$events = array();
+		
 		// Exists?
 		$params = array(
 			'stream' => 'categories',

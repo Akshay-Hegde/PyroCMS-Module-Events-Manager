@@ -1,5 +1,3 @@
-{{ if events }}
-
 <h1>{{ template:title }}</h1>
 
 <ul>
@@ -10,6 +8,7 @@
 {{ /categories }}
 </ul>
 
+{{ if events }}
 	<table class="table">
 		<tr>
 			<th>Date</th>
