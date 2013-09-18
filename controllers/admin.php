@@ -114,4 +114,29 @@ class Admin extends Admin_Controller
 		$this->session->set_flashdata('error', 'Event was deleted.');
 		redirect('admin/events_manager');
 	}
+	
+	public function registrations($event_id)
+	{
+		$params = array(
+			'stream' => 'registrations',
+			'namespace' => 'events_manager',
+			'where' => "`event_id` = '{$event_id}'"
+		);
+		
+		$data->registrants = $this->streams->entries->get_entries($params);
+		
+		$this->template
+			->set_partial('contents', 'admin/registrants/list')
+			->build('admin/tpl/container', $data);
+	}
+	
+	public function add_registration()
+	{
+		
+	}
+	
+	public function delete_registration($event_id, $user_id)
+	{
+		
+	}
 }
