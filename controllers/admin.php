@@ -66,7 +66,27 @@ class Admin extends Admin_Controller
 			$params['year'] = $data->filters->year + 2013;
 		}
 		
-		$data->events = $this->streams->entries->get_entries($params);
+		$events = $this->streams->entries->get_entries($params);
+		
+		$data->pagination = $events['pagination'];
+		
+		foreach($events['entries'] as $event)
+		{
+			if($event['registration']['key'] == 'yes')
+			{
+				$params = array(
+					'stream' => 'registrations',
+					'namespace' => 'events_manager',
+					'where' => '`event_id` = ' . $event['id']
+				);
+				
+				$registrations = $this->streams->entries->get_entries($params);
+				
+				$event['registration_count'] = $registrations['total'];
+			}
+			
+			$data->events[] = $event;
+		}
 		
 		// Set partials and boom!
 		$this->template
