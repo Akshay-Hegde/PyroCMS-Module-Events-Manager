@@ -10,7 +10,7 @@
 				<?php echo form_dropdown('month', range(1, 12), set_value('month', $filters->month)) ?>
             </li>
 			<li>
-				<label name="year">Month</label>
+				<label name="year">Year</label>
 				<?php echo form_dropdown('year', range(2013, 2016), set_value('year', $filters->year)) ?>
 			</li>
 			<li><?php echo form_submit('submit', 'Filter', 'class="button"'); ?></li>
