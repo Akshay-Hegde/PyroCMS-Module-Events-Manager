@@ -137,8 +137,22 @@ class Admin extends Admin_Controller
 		
 	}
 	
-	public function delete_registration($event_id, $user_id)
+	public function delete_registrant($registration_id)
 	{
+		$registration = $this->streams->entries->get_entry($registration_id, 'registrations', 'events_manager');
+		$result = $this->streams->entries->delete_entry($registration_id, 'registrations', 'events_manager');
 		
+		if($result)
+		{
+			// Success
+			$this->session->set_flashdata('success', 'Registrant deleted');
+		}
+		else
+		{
+			// Failure adding answers
+			$this->session->set_flashdata('error', 'There was an issue.');
+		}
+		
+		redirect("admin/events_manager/registrations/$registration->event_id");
 	}
 }

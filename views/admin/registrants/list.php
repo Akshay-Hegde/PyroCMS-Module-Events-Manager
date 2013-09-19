@@ -15,7 +15,7 @@
 		$column2 = $registrant->email;
 		
 		// Actions
-		$action1 = anchor(site_url("admin/events_manager/delete/$registrant->id"), 'Remove', 'class="button confirm"');		
+		$action1 = anchor(site_url("admin/events_manager/delete_registrant/$registrant->id"), 'Remove', 'class="button confirm"');		
 		
 		$actions = array(
 			'data' => $action1,
