@@ -117,6 +117,8 @@ class Admin extends Admin_Controller
 	
 	public function registrations($event_id)
 	{
+		$data->event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager', false);
+		
 		$params = array(
 			'stream' => 'registrations',
 			'namespace' => 'events_manager',
@@ -130,7 +132,7 @@ class Admin extends Admin_Controller
 			->build('admin/tpl/container', $data);
 	}
 	
-	public function add_registration()
+	public function add_registrant()
 	{
 		
 	}

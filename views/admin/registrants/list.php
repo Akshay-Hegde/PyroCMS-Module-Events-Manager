@@ -31,6 +31,15 @@
 
 ?>
 
+<br>
+
+<div class="table_action_buttons">
+	<?php echo anchor(site_url('admin/events_manager/add_registrant/' . $event->id), 'Add Registrant', 'class="btn blue"') ?>
+	<?php echo anchor(site_url('admin/events_manager/form/' . $event->id), 'Edit Event', 'class="btn orange"') ?>
+	<?php echo anchor(site_url('admin/events_manager'), '&larr; Back to list', 'class="btn gray"') ?>
+	
+</div>
+
 <?php else: ?>
 
 <div class="no_data">No Registrants</div>
