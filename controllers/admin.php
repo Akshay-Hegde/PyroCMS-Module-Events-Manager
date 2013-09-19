@@ -128,13 +128,60 @@ class Admin extends Admin_Controller
 		$data->registrants = $this->streams->entries->get_entries($params);
 		
 		$this->template
+			->title('Registrants for ' . $data->event->title)
 			->set_partial('contents', 'admin/registrants/list')
 			->build('admin/tpl/container', $data);
 	}
 	
-	public function add_registrant()
+	public function add_registrant($event_id)
 	{
+		$validation_rules = array(
+			array(
+				'field' => 'name',
+				'label' => 'Name',
+				'rules'	=> 'required|trim|max_length[100]'
+			),
+			array(
+				'field' => 'email',
+				'label' => 'Email',
+				'rules'	=> 'required|valid_email|max_length[255]'
+			)
+		);
+
+		$this->form_validation->set_rules($validation_rules);
 		
+		if($this->form_validation->run())
+		{
+			$insert = array(
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
+				'event_id' => $event_id
+			);
+			
+			$result = $this->streams->entries->insert_entry($insert, 'registrations', 'events_manager');
+			
+			if($result)
+			{
+				// Success
+				$this->session->set_flashdata('success', 'Added registrant successfully');
+			}
+			else
+			{
+				// Failure adding answers
+				$this->session->set_flashdata('error', 'Unable to add registrant');
+			}
+			
+			redirect("admin/events_manager/registrations/$event_id");
+		}
+		else
+		{
+			$event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager');
+
+			$this->template
+				->title('Add Registrant to ' . $event->title)
+				->set_partial('contents', 'admin/registrants/add')
+				->build('admin/tpl/container');
+		}
 	}
 	
 	public function delete_registrant($registration_id)
