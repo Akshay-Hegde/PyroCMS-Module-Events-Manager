@@ -39,6 +39,8 @@ class Admin extends Admin_Controller
 
 	public function index($offset = 0)
 	{
+		$data->events = array();
+		
 		if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
 		
 		$this->template->title('Upcoming Events');
