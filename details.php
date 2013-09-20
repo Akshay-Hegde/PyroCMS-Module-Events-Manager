@@ -418,11 +418,12 @@ class Module_Events_manager extends Module {
 				'description' => 'Calendar or list view.',
 				'`default`' => 'calendar',
 				'`value`' => 'calendar',
-				'type' => 'select',
+				'type' => 'radio',
 				'`options`' => 'calendar=Calendar|events=List',
 				'is_required' => 1,
 				'is_gui' => 1,
-				'module' => 'events_manager'
+				'module' => 'events_manager',
+				'order' => 100
 			),
 			array(
 				'slug' => 'em_calendar_day_option',
@@ -430,11 +431,25 @@ class Module_Events_manager extends Module {
 				'description' => 'Show a list of events on the days in the calendar view or just link to the day view.',
 				'`default`' => 'list',
 				'`value`' => 'list',
-				'type' => 'select',
+				'type' => 'radio',
 				'`options`' => 'list=Show Events|link=Link to Day View',
 				'is_required' => 1,
 				'is_gui' => 1,
-				'module' => 'events_manager'
+				'module' => 'events_manager',
+				'order' => 90
+			),
+			array(
+				'slug' => 'em_allow_registrations',
+				'title' => 'Enable Registrations',
+				'description' => 'Enabling this will allow you to optionally accept registration for your events. Currently, the registration does not require the registrant to login and only acquires their name and email.',
+				'`default`' => 'no',
+				'`value`' => 'no',
+				'type' => 'radio',
+				'`options`' => 'no=No|yes=yes',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager',
+				'order' => 80
 			)
 		);
 		// Let's try running our DB Forge Table and inserting some settings
