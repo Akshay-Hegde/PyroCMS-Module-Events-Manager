@@ -102,7 +102,14 @@ class Admin extends Admin_Controller
 			'title' => $id ? 'Edit Event' : 'Add Event'
 		);
 		
-		$this->streams->cp->entry_form('events', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra);
+		$skips = array();
+		
+		if(Settings::get('em_allow_registrations') == 'no')
+		{
+			$skips = array('registration', 'limit');
+		}
+		
+		$this->streams->cp->entry_form('events', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
 	}
 	
 	public function delete($id = 0)
