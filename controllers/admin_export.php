@@ -79,7 +79,7 @@ class Admin_export extends Admin_Controller
 		// Set partials and boom!
 		$this->template
 			->set_partial('filters', 'admin/events/filters')
-			->set_partial('contents', 'admin/events/list')
+			->set_partial('contents', 'admin/export/list')
 			->build('admin/tpl/container', $data);
 	}
 }
