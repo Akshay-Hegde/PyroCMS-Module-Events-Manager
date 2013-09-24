@@ -32,7 +32,7 @@ class Module_Events_manager extends Module {
 				)
 			),
 			'roles' => array(
-				'categories', 'custom_fields', 'colors', 'settings'
+				'categories', 'custom_fields', 'colors', 'settings', 'export'
 			)
 		);
 		
@@ -93,6 +93,14 @@ class Module_Events_manager extends Module {
 							'class' => 'add'
 						)
 					)
+				);
+			}
+			
+			if(group_has_role('events_manager', 'export'))
+			{
+				$info['sections']['export'] = array(
+					'name' 	=> 'events_manager:export:title',
+					'uri' 	=> 'admin/events_manager/export'
 				);
 			}
 			

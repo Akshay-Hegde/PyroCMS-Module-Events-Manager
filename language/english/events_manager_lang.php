@@ -4,6 +4,7 @@ $lang['events_manager:events:title'] = 'Events';
 $lang['events_manager:categories:title'] = 'Categories';
 $lang['events_manager:custom_fields:title'] = 'Custom Fields';
 $lang['events_manager:colors:title'] = 'Colors';
+$lang['events_manager:export:title'] = 'Export';
 $lang['events_manager:settings:title'] = 'Settings';
 
 $lang['events_manager:events:add'] = 'Add Event';
