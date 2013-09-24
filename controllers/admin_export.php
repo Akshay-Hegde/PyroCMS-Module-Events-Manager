@@ -77,9 +77,7 @@ class Admin_export extends Admin_Controller
 		
 		if($this->input->post('submit') == 'Export to CSV')
 		{
-			$this->streams->streams->get_assignments('faqs', 'faq');
-			
-			foreach($events)
+
 		}
 		else
 		{
