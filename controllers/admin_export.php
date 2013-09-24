@@ -55,7 +55,7 @@ class Admin_export extends Admin_Controller
 			'date_by' => 'start',
 			'show_past' => 'no',
 			'paginate' => 'yes',
-			'pag_segment' => 4
+			'pag_segment' => 5
 		);
 		
 		if($data->filters->month = $this->input->post('month'))
