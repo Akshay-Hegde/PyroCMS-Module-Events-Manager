@@ -37,25 +37,20 @@ class Admin_export extends Admin_Controller
 		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
     }
 
-	public function index($offset = 0)
+	public function index()
 	{
 		$data->events = array();
-		
-		if($this->uri->segment(4) != 'index') redirect(current_url() . '/index');
 		
 		$this->template->title('Export Events');
 		
 		$params = array(
 			'stream' => 'events',
 			'namespace' => 'events_manager',
-			'limit' => Settings::get('records_per_page'),
-			'offset' => $offset,
 			'order_by' => 'start',
 			'sort' => 'asc',
 			'date_by' => 'start',
 			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_segment' => 5
+			'paginate' => 'no'
 		);
 		
 		if($data->filters->month = $this->input->post('month'))
@@ -63,23 +58,40 @@ class Admin_export extends Admin_Controller
 			$params['month'] = $data->filters->month + 1;
 			$params['show_past'] = 'yes';
 		}
+		else
+		{
+			$params['month'] = date('n');
+		}
 		
 		if($data->filters->year = $this->input->post('year'))
 		{
 			$params['year'] = $data->filters->year + 2013;
 			$params['show_past'] = 'yes';
 		}
+		else
+		{
+			$params['year'] = date('Y');
+		}
 		
 		$events = $this->streams->entries->get_entries($params);
 		
-		$data->events = $events['entries'];
-		
-		$data->pagination = $events['pagination'];
-		
-		// Set partials and boom!
-		$this->template
-			->set_partial('filters', 'admin/events/filters')
-			->set_partial('contents', 'admin/export/list')
-			->build('admin/tpl/container', $data);
+		if($this->input->post('submit') == 'Export to CSV')
+		{
+			$this->streams->streams->get_assignments('faqs', 'faq');
+			
+			foreach($events)
+		}
+		else
+		{
+			$data->events = $events['entries'];
+
+			$data->pagination = $events['pagination'];
+
+			// Set partials and boom!
+			$this->template
+				->set_partial('filters', 'admin/export/filters')
+				->set_partial('contents', 'admin/export/list')
+				->build('admin/tpl/container', $data);
+		}
 	}
 }

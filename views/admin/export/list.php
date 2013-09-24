@@ -18,8 +18,6 @@
 	}
 
 	echo $this->table->generate();
-	
-	echo $pagination;
 
 ?>
 
