@@ -39,8 +39,9 @@ class Admin_export extends Admin_Controller
 
 	public function index()
 	{
-		$this->template->title('Export Events');
+		$this->template->title('Export Events to a CSV file');
 		
+		// @todo add validation
 		if($_POST)
 		{
 			$from = $this->input->post('from');
@@ -57,8 +58,8 @@ class Admin_export extends Admin_Controller
 		
 		if($this->input->post('submit') == 'Export to CSV')
 		{
-			$from = $this->input->post('from', true);
-			$to = $this->input->post('to', true);
+			$from = $this->input->post('from');
+			$to = $this->input->post('to');
 			
 			$this->load->dbutil();
 			$this->load->helper('download');
@@ -66,6 +67,15 @@ class Admin_export extends Admin_Controller
 			$sql = "SELECT * FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
 
 			$query = $this->db->query($sql);
+
+			$results = $query->result_array();
+
+			if(empty($results))
+			{
+				$this->session->set_flashdata('error', 'No events are available in that range.');
+				
+				redirect('admin/events_manager/export');
+			}
 			
 			$data = $this->dbutil->csv_from_result($query);
 			
