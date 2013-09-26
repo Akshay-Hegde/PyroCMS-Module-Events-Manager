@@ -119,8 +119,15 @@ class Module_Events_manager extends Module {
 	public function install()
 	{
 		$this->load->driver('Streams');
+		$this->load->library('files/files');
 		$this->streams->utilities->remove_namespace('events_manager');
 		$this->db->delete('settings', array('module' => 'events_manager'));
+		Files::delete_folder(Settings::get('em_categories_folder_id'));
+		
+		// Create Folder
+		$folder = Files::create_folder(0, 'EM Category Images');
+		if($folder['status'] != 1) return false;
+		$em_categories_folder_id = $folder['data']['id'];
 		
 		// Add Category colors
 		if(!$this->streams->streams->add_stream('Category Colors', 'category_colors', 'events_manager', 'em_', 'Colors for Event Categories')) return false;
@@ -245,6 +252,16 @@ class Module_Events_manager extends Module {
 				'unique' => true
 			),
 			array(
+				'name' => 'Description',
+				'slug' => 'category_description',
+				'namespace' => 'events_manager',
+				'type' => 'textarea',
+				'assign' => 'categories',
+				'title_column' => false,
+				'required' => false,
+				'unique' => false
+			),
+			array(
 				'name' => 'Color',
 				'slug' => 'color_id',
 				'namespace' => 'events_manager',
@@ -254,7 +271,18 @@ class Module_Events_manager extends Module {
 				'title_column' => false,
 				'required' => true,
 				'unique' => true
-			)
+			),
+			array(
+				'name' => 'Category Image',
+				'slug' => 'category_image',
+				'namespace' => 'events_manager',
+				'type' => 'image',
+				'extra' => array('folder' => $folder['data']['id']),
+				'assign' => 'categories',
+				'title_column' => false,
+				'required' => false,
+				'unique' => false
+			),
 		);
 		
 		$this->streams->fields->add_fields($fields);
@@ -419,7 +447,7 @@ class Module_Events_manager extends Module {
 		
 		// Ok, now for some settings
 		
-		$em_setting = array(
+		$settings = array(
 			array(
 				'slug' => 'em_default_view',
 				'title' => 'Default View',
@@ -458,10 +486,23 @@ class Module_Events_manager extends Module {
 				'is_gui' => 1,
 				'module' => 'events_manager',
 				'order' => 80
+			),
+			array(
+				'slug' => 'em_categories_folder_id',
+				'title' => 'EM Categories Folder ID',
+				'description' => 'The ID of the folder where the category images are kept.',
+				'`default`' => '0',
+				'`value`' => $em_categories_folder_id,
+				'type' => 'text',
+				'`options`' => '',
+				'is_required' => 1,
+				'is_gui' => 0,
+				'module' => 'events_manager',
+				'order' => 0
 			)
 		);
 		// Let's try running our DB Forge Table and inserting some settings
-		if ( ! $this->db->insert_batch('settings', $em_setting))
+		if ( ! $this->db->insert_batch('settings', $settings))
 		{
 			return false;
 		}
@@ -472,9 +513,10 @@ class Module_Events_manager extends Module {
 	public function uninstall()
 	{
 		$this->load->driver('Streams');
-
+		$this->load->library('files/files');
         $this->streams->utilities->remove_namespace('events_manager');
 		$this->db->delete('settings', array('module' => 'events_manager'));
+		Files::delete_folder(Settings::get('em_categories_folder_id'));
 
         return true;
 	}
