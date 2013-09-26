@@ -6,14 +6,13 @@
 
         <ul>  
             <li>
-                <label name="month">Month</label>
-				<?php echo form_dropdown('month', range(1, 12), set_value('month', $filters->month)) ?>
+                <label name="from">From</label>
+				<?php echo form_input('from', set_value('from', $from), 'id="datepicker"') ?>
             </li>
 			<li>
-				<label name="year">Year</label>
-				<?php echo form_dropdown('year', range(2013, 2016), set_value('year', $filters->year)) ?>
-			</li>
-			<li><?php echo form_submit('submit', 'Filter', 'class="button"'); ?></li>
+                <label name="to">To</label>
+				<?php echo form_input('to', set_value('to', $to), 'id="datepicker"') ?>
+            </li>
 			<li><?php echo form_submit('submit', 'Export to CSV', 'class="button"'); ?></li>
             <li><?php echo anchor(current_url(), 'Reset', 'class="button"'); ?></li>
         </ul>
