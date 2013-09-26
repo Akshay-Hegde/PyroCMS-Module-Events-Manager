@@ -78,7 +78,6 @@ class Admin_export extends Admin_Controller
 			}
 			
 			$data = $this->dbutil->csv_from_result($query);
-			
 			$name = 'calendar_events_' . $from . '_to_' . $to . '.csv';
 
 			force_download($name, $data);

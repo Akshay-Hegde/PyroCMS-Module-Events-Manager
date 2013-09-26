@@ -40,7 +40,7 @@ class Admin_colors extends Admin_Controller
 	public function index($offset = 0)
 	{
 		$extra = array(
-			'title' => 'Colors',
+			'title' => 'Category Colors',
 			
 			'buttons' => array(
 				array(
