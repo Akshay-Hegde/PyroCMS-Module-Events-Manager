@@ -262,7 +262,7 @@ class Module_Events_manager extends Module {
 		$entry_data = array(
 		        'category'  => 'No Category',
 				'color_id' => 1,
-				'slug' => 'no-category'
+				'category_slug' => 'no-category'
 		    );
 		
 		$this->streams->entries->insert_entry($entry_data, 'categories', 'events_manager');
