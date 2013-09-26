@@ -57,7 +57,21 @@ class Admin_export extends Admin_Controller
 		
 		if($this->input->post('submit') == 'Export to CSV')
 		{
+			$from = $this->input->post('from', true);
+			$to = $this->input->post('to', true);
+			
+			$this->load->dbutil();
+			$this->load->helper('download');
+			
+			$sql = "SELECT * FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
 
+			$query = $this->db->query($sql);
+			
+			$data = $this->dbutil->csv_from_result($query);
+			
+			$name = 'calendar_events_' . $from . '_to_' . $to . '.csv';
+
+			force_download($name, $data);
 		}
 		else
 		{

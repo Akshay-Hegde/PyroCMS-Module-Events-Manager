@@ -1,6 +1,6 @@
 <fieldset id="filters">
 
-    <legend><?php echo lang('global:filters'); ?></legend>
+    <legend>Define the export range</legend>
 
     <?php echo form_open(); ?>
 
