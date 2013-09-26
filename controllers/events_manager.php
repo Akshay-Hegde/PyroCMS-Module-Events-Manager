@@ -20,7 +20,7 @@ class Events_manager extends Public_Controller
 		// Load lang
         $this->lang->load('events_manager');
 
-		redirect('events_manager/' . Settings::get('em_default_view'));
+		if($this->uri->segment(3) == '') redirect('events_manager/' . Settings::get('em_default_view'));
     }
 
 	public function index()

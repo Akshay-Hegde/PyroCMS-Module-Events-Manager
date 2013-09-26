@@ -63,7 +63,7 @@ class Em_calendar extends Public_Controller
 		if($day)
 		{
 			// @todo format setting
-			$this->template->title('Events for ' . date('M i, Y'));
+			$this->template->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)));
 			
 			$params['day'] = $day;
 			

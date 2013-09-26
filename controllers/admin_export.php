@@ -67,18 +67,16 @@ class Admin_export extends Admin_Controller
 			$sql = "SELECT * FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
 
 			$query = $this->db->query($sql);
-
+			$data = $this->dbutil->csv_from_result($query);
+			$name = 'calendar_events_' . $from . '_to_' . $to . '.csv';
 			$results = $query->result_array();
-
+			
 			if(empty($results))
 			{
 				$this->session->set_flashdata('error', 'No events are available in that range.');
 				
 				redirect('admin/events_manager/export');
 			}
-			
-			$data = $this->dbutil->csv_from_result($query);
-			$name = 'calendar_events_' . $from . '_to_' . $to . '.csv';
 
 			force_download($name, $data);
 		}
