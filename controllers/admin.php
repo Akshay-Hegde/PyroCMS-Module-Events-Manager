@@ -61,11 +61,13 @@ class Admin extends Admin_Controller
 		if($data->filters->month = $this->input->post('month'))
 		{
 			$params['month'] = $data->filters->month + 1;
+			$params['show_past'] = 'yes';
 		}
 		
 		if($data->filters->year = $this->input->post('year'))
 		{
 			$params['year'] = $data->filters->year + 2013;
+			$params['show_past'] = 'yes';
 		}
 		
 		$events = $this->streams->entries->get_entries($params);
