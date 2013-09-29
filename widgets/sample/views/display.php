@@ -1,1 +1,0 @@
-<!-- Widget HTML and data -->
