@@ -53,7 +53,7 @@ class Em_events extends Public_Controller
 		$params = array(
 			'stream' => 'events',
 			'namespace' => 'events_manager',
-			'limit' => 2, //Settings::get('records_per_page'),
+			'limit' => Settings::get('records_per_page'),
 			'order_by' => 'start',
 			'sort' => 'asc',
 			'date_by' => 'start',
@@ -110,7 +110,7 @@ class Em_events extends Public_Controller
 			$params = array(
 				'stream' => 'events',
 				'namespace' => 'events_manager',
-				'limit' => 2, //Settings::get('records_per_page'),
+				'limit' => Settings::get('records_per_page'),
 				'order_by' => 'start',
 				'sort' => 'asc',
 				'date_by' => 'start',
