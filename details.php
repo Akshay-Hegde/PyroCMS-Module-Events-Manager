@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '0.9.0';
+	public $version = '1.0.0';
 
 	public function info()
 	{
@@ -35,18 +35,6 @@ class Module_Events_manager extends Module {
 				'categories', 'custom_fields', 'colors', 'settings', 'export'
 			)
 		);
-		
-		// // Adding short cuts to specific sections
-		// if ($this->controller == 'admin_simple' && $this->uri->segment(4) != 'other_conditions')
-		// {
-		// 	$info['sections']['simple']['shortcuts'] = array(
-		// 					array(
-		// 					    'name' => 'simple:shortcut',
-		// 					    'uri' => '',
-		// 					    'class' => ''
-		// 					)
-		// 			    );
-		// }
 		
 		// Add section only if they have permission
 		if (function_exists('group_has_role'))
