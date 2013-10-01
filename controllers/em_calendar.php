@@ -101,7 +101,7 @@ class Em_calendar extends Public_Controller
 			$data = $this->_build($events, $year, $month);
 
 			$this->template
-				->set_layout('default.html')
+				->set_layout(Settings::get('em_calendar_layout'))
 				->build('front/calendar/view', $data);
 		}
 		
@@ -148,7 +148,7 @@ class Em_calendar extends Public_Controller
 		$data = $this->_build($events, $year, $month, $slug);
 		
 		$this->template
-			->set_layout('default.html')
+			->set_layout(Settings::get('em_calendar_layout'))
 			->build('front/calendar/view', $data);
 	}
 	

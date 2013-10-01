@@ -15,13 +15,14 @@
 		$column2 = $event->title;
 		
 		// Actions
-		$action1 = ($event->registration['key'] == 'yes') ? anchor(site_url("admin/events_manager/registrations/$event->id"), 'Registrants (' . $event->registration_count . ')', 'class="button"') : '';
-		$action2 = anchor(site_url("admin/events_manager/form/$event->id"), 'Edit', 'class="button"');
-		$action3 = anchor(site_url("admin/events_manager/delete/$event->id"), 'Delete', 'class="button confirm"');
-		
+		$actions = array();
+		$actions[] = ($event->registration['key'] == 'yes') ? anchor(site_url("admin/events_manager/registrations/$event->id"), 'Registrants (' . $event->registration_count . ')', 'class="button"') : '';
+		$actions[] = anchor(site_url('events_manager/event' . date('/Y/m/d/', $event->start) . $event->slug), 'View', 'class="button"');
+		$actions[] = anchor(site_url("admin/events_manager/form/$event->id"), 'Edit', 'class="button"');
+		$actions[] = anchor(site_url("admin/events_manager/delete/$event->id"), 'Delete', 'class="button confirm"');
 		
 		$actions = array(
-			'data' => $action1 . ' ' . $action2 . ' ' . $action3,
+			'data' => implode(' ', $actions),
 			'class' => "actions"
 		);
 		

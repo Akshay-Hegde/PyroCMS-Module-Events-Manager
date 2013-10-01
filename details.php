@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '0.9.0';
+	public $version = '1.0.0';
 
 	public function info()
 	{
@@ -35,18 +35,6 @@ class Module_Events_manager extends Module {
 				'categories', 'custom_fields', 'colors', 'settings', 'export'
 			)
 		);
-		
-		// // Adding short cuts to specific sections
-		// if ($this->controller == 'admin_simple' && $this->uri->segment(4) != 'other_conditions')
-		// {
-		// 	$info['sections']['simple']['shortcuts'] = array(
-		// 					array(
-		// 					    'name' => 'simple:shortcut',
-		// 					    'uri' => '',
-		// 					    'class' => ''
-		// 					)
-		// 			    );
-		// }
 		
 		// Add section only if they have permission
 		if (function_exists('group_has_role'))
@@ -499,7 +487,20 @@ class Module_Events_manager extends Module {
 				'is_gui' => 0,
 				'module' => 'events_manager',
 				'order' => 0
-			)
+			),
+			array(
+				'slug' => 'em_calendar_layout',
+				'title' => 'Calendar View Theme Layout',
+				'description' => 'Type in the name of the theme layout file you would like to use for the calendar view.',
+				'`default`' => 'default.html',
+				'`value`' => 'default.html',
+				'type' => 'text',
+				'`options`' => '',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager',
+				'order' => 70
+			),
 		);
 		// Let's try running our DB Forge Table and inserting some settings
 		if ( ! $this->db->insert_batch('settings', $settings))

@@ -74,6 +74,27 @@ class Plugin_Events_manager extends Plugin
 		
 		return implode(' ', $display);
 	}
+	
+	public function events()
+	{
+		$this->load->driver('streams');
+		$limit = $this->attribute('limit', 5);
+		$show_past = $this->attribute('show_past', 'no');
+		
+		$params = array(
+			'stream' => 'events',
+			'namespace' => 'events_manager',
+			'limit' => $limit,
+			'order_by' => 'start',
+			'sort' => 'asc',
+			'date_by' => 'start',
+			'show_past' => $show_past
+		);
+		
+		$events = $this->streams->entries->get_entries($params);
+
+		return $events['entries'];
+	}
 
 }
 
