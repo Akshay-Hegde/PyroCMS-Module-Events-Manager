@@ -487,7 +487,20 @@ class Module_Events_manager extends Module {
 				'is_gui' => 0,
 				'module' => 'events_manager',
 				'order' => 0
-			)
+			),
+			array(
+				'slug' => 'em_calendar_layout',
+				'title' => 'Calendar View Theme Layout',
+				'description' => 'Type in the name of the theme layout file you would like to use for the calendar view.',
+				'`default`' => 'default.html',
+				'`value`' => 'default.html',
+				'type' => 'text',
+				'`options`' => '',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager',
+				'order' => 70
+			),
 		);
 		// Let's try running our DB Forge Table and inserting some settings
 		if ( ! $this->db->insert_batch('settings', $settings))
