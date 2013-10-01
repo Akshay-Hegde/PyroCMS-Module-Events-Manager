@@ -178,6 +178,7 @@ class Em_calendar extends Public_Controller
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
 				'start' => $event->start,
+				'end' => $event->end,
 				'slug' => $event->slug,
 				'color_slug' => $color['color_slug']
 			);
