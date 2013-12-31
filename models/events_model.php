@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * UDL Courses Model
+ * Events Model
  *
  * @author 		Philsquare LLC
  * @website		http://philsquare.com
