@@ -22,7 +22,7 @@ This module was built because several of our clients needed a simple events mana
  * Add, edit and delete events
  * Events start with basic fields. These fields are title, start, end, description, location and category.
  * Events can be displayed as a list or calendar view.
- * In the calendar mode, events can be listed on the days or the day can link to the list of events on that day (change in Settings).
+ * In the calendar mode, events can be listed on the days or the day can link to the list of events on that day (change in "Settings").
 * __Categories__
  * Add, edit and delete categories
  * Category fields are title, description, color and image.
@@ -41,20 +41,21 @@ This module was built because several of our clients needed a simple events mana
  * Select whether the default view "/events_manager" should be the calendar or list
  * On the calendar decide whether to show a list of events on the days or just have the day link to a page that displays the event.
  * Enable/Disable registrations
- * This is cool for designers: set your custom calendar or list layout
-*__Goodies__
+ * This is cool for designers, set your custom calendar or list layout
+* __Goodies__
  * Plugin with 2 methods
  * Widget for displaying upcoming events
+ * Events are index for searching in admin panel or the visitor's side
 
 ### Designers
 
 #### Views
 
-This module is built so the layouts can be easily overloaded without having to alter the core views. In your theme, create a folder called "events_manager" inside your "views" folder. Then copy the "front" folder from the module's view folder to your newly created folders.
+This module is built so the layouts can be easily overloaded without having to alter the core views. In your theme, create a folder called "events_manager" inside your "views" folder. Then copy the "front" folder from the module's view folder to your newly created folder.
 
 #### Plugin
 
-The plugin has 2 simple methods. One to help display a timespan and the other allows you to display a list of events. I'll have more documentation in the future but the basic usage is {{ events_manager:events limit="5" show_past="no" where="`private`='yes'" }} ... add your markup and vars {{ /events_manager:events }}.
+The plugin has 2 simple methods. One to help display a timespan and the other allows you to display a list of events. I'll have more documentation in the future but the basic usage is {{ events_manager:events limit="5" show_past="no" where="\`private\`='yes'" }} ... add your markup and vars {{ /events_manager:events }}.
 
 ### Support
 
