@@ -37,7 +37,7 @@ class Events_Events_manager {
 			    'event',
 			    'events',
 			    $event->entry_id,
-			    'event/' . date('Y/m/', strtotime($event_data->start)) . $event_data->slug,
+			    'events_manager/event/' . date('Y/m/d/', strtotime($event_data->start)) . $event_data->slug,
 			    $event_data->title,
 			    $event_data->description,
 			    array(
@@ -66,7 +66,7 @@ class Events_Events_manager {
 			    'event',
 			    'events',
 			    $event->entry_id,
-			    'event/' . date('Y/m/', strtotime($event_data->start)) . $event_data->slug,
+			    'events_manager/event/' . date('Y/m/d/', strtotime($event_data->start)) . $event_data->slug,
 			    $event_data->title,
 			    $event_data->description,
 			    array(
