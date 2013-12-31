@@ -87,6 +87,7 @@ class Em_events extends Public_Controller
 		$this->template
 			->set('pagination', $results['pagination'])
 			->set('events', $events)
+			->set_layout(Settings::get('em_list_layout'))
 			->build('front/list');
 	}
 	

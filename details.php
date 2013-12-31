@@ -500,7 +500,7 @@ class Module_Events_manager extends Module {
 				'is_gui' => 1,
 				'module' => 'events_manager',
 				'order' => 70
-			),
+			)
 		);
 		// Let's try running our DB Forge Table and inserting some settings
 		if ( ! $this->db->insert_batch('settings', $settings))
@@ -537,18 +537,31 @@ class Module_Events_manager extends Module {
 	{
 		// Upgrade Logic
 
-		// if($old_version == 'A')
+		// if($old_version == '1.0.0')
 		// {
-		// 	// Upgrade from A to B
+		// 	$settings = array(
+		// 		array(
+		// 			'slug' => 'em_list_layout',
+		// 			'title' => 'List View Theme Layout',
+		// 			'description' => 'Type in the name of the theme layout file you would like to use for the list view.',
+		// 			'`default`' => 'default.html',
+		// 			'`value`' => 'default.html',
+		// 			'type' => 'text',
+		// 			'`options`' => '',
+		// 			'is_required' => 1,
+		// 			'is_gui' => 1,
+		// 			'module' => 'events_manager',
+		// 			'order' => 60
+		// 		),
+		// 	);
 		// 	
-		// 	$old_version = 'B';
-		// }
-		// 
-		// if($old_version == 'B')
-		// {
-		// 	// Upgrade from B to C
+		// 	// Let's try running our DB Forge Table and inserting some settings
+		// 	if ( ! $this->db->insert_batch('settings', $settings))
+		// 	{
+		// 		return false;
+		// 	}
 		// 	
-		// 	$old_version = 'current';
+		// 	$old_version = '1.0.1';
 		// }
 		
 		return true;
