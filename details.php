@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '1.0.0';
+	public $version = '1.0.1';
 
 	public function info()
 	{
@@ -162,47 +162,47 @@ class Module_Events_manager extends Module {
 			array(
 				'color' => 'Grey',
 				'hex' => '999999',
-				'slugs' => 'grey'
+				'color_slug' => 'grey'
 			),
 			array(
 				'color' => 'Yellow',
 				'hex' => 'ffff00',
-				'slugs' => 'yellow'
+				'color_slug' => 'yellow'
 			),
 			array(
 				'color' => 'Orange',
 				'hex' => 'ff9900',
-				'slugs' => 'orange'
+				'color_slug' => 'orange'
 			),
 			array(
 				'color' => 'Purple',
 				'hex' => '000066',
-				'slugs' => 'purple'
+				'color_slug' => 'purple'
 			),
 			array(
 				'color' => 'Red',
 				'hex' => 'ff0000',
-				'slugs' => 'red'
+				'color_slug' => 'red'
 			),
 			array(
 				'color' => 'Green',
 				'hex' => '006600',
-				'slugs' => 'green'
+				'color_slug' => 'green'
 			),
 			array(
 				'color' => 'Blue',
 				'hex' => '0000ff',
-				'slugs' => 'blue'
+				'color_slug' => 'blue'
 			),
 			array(
 				'color' => 'Brown',
 				'hex' => '663300',
-				'slugs' => 'brown'
+				'color_slug' => 'brown'
 			),
 			array(
 				'color' => 'Black',
 				'hex' => '000000',
-				'slugs' => 'black'
+				'color_slug' => 'black'
 			)
 		);
 		
@@ -500,7 +500,7 @@ class Module_Events_manager extends Module {
 				'is_gui' => 1,
 				'module' => 'events_manager',
 				'order' => 70
-			),
+			)
 		);
 		// Let's try running our DB Forge Table and inserting some settings
 		if ( ! $this->db->insert_batch('settings', $settings))
@@ -517,7 +517,17 @@ class Module_Events_manager extends Module {
 		$this->load->library('files/files');
         $this->streams->utilities->remove_namespace('events_manager');
 		$this->db->delete('settings', array('module' => 'events_manager'));
-		Files::delete_folder(Settings::get('em_categories_folder_id'));
+		
+		// Delete files and then folder
+		$folder_id = Settings::get('em_categories_folder_id');
+		$files = Files::folder_contents($folder_id);
+		
+		foreach($files['data']['file'] as $file)
+		{
+			Files::delete_file($file->id);
+		}
+		
+		Files::delete_folder($folder_id);
 
         return true;
 	}
@@ -527,19 +537,32 @@ class Module_Events_manager extends Module {
 	{
 		// Upgrade Logic
 
-		// if($old_version == 'A')
-		// {
-		// 	// Upgrade from A to B
-		// 	
-		// 	$old_version = 'B';
-		// }
-		// 
-		// if($old_version == 'B')
-		// {
-		// 	// Upgrade from B to C
-		// 	
-		// 	$old_version = 'current';
-		// }
+		if($old_version == '1.0.0')
+		{
+			$settings = array(
+				array(
+					'slug' => 'em_list_layout',
+					'title' => 'List View Theme Layout',
+					'description' => 'Type in the name of the theme layout file you would like to use for the list view.',
+					'`default`' => 'default.html',
+					'`value`' => 'default.html',
+					'type' => 'text',
+					'`options`' => '',
+					'is_required' => 1,
+					'is_gui' => 1,
+					'module' => 'events_manager',
+					'order' => 60
+				),
+			);
+			
+			// Let's try running our DB Forge Table and inserting some settings
+			if ( ! $this->db->insert_batch('settings', $settings))
+			{
+				return false;
+			}
+			
+			$old_version = '1.0.1';
+		}
 		
 		return true;
 	}

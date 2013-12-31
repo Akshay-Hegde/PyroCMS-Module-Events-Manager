@@ -54,7 +54,7 @@ class Admin_colors extends Admin_Controller
 				)
 			),
 			
-			'columns' => array('color', 'hex')
+			'columns' => array('color', 'color_slug', 'hex')
 		);
 		
 		$this->streams->cp->entries_table('category_colors', 'events_manager', 20, 'admin/events_manager/colors', true, $extra);

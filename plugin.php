@@ -64,12 +64,16 @@ class Plugin_Events_manager extends Plugin
 			$display[] = date($time_format, $end);
 		}
 		
-		// Multiple days. We won't show times
+		// Multiple days.
 		else
 		{
 			$display[] = date($date_format, $start);
+			$display[] = '@';
+			$display[] = date($time_format, $start);
 			$display[] = 'to';
 			$display[] = date($date_format, $end);
+			$display[] = '@';
+			$display[] = date($time_format, $end);
 		}
 		
 		return implode(' ', $display);
@@ -80,6 +84,7 @@ class Plugin_Events_manager extends Plugin
 		$this->load->driver('streams');
 		$limit = $this->attribute('limit', 5);
 		$show_past = $this->attribute('show_past', 'no');
+		$where = $this->attribute('where', null);
 		
 		$params = array(
 			'stream' => 'events',
@@ -90,6 +95,8 @@ class Plugin_Events_manager extends Plugin
 			'date_by' => 'start',
 			'show_past' => $show_past
 		);
+		
+		if($where) $params['where'] = $where;
 		
 		$events = $this->streams->entries->get_entries($params);
 

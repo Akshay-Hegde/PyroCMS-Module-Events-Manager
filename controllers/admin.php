@@ -58,14 +58,16 @@ class Admin extends Admin_Controller
 			'pag_segment' => 4
 		);
 		
-		if($data->filters->month = $this->input->post('month'))
+		if($data->filters->month = ($this->input->post('submit') == 'Filter'))
 		{
+			$data->filters->month = $this->input->post('month');
 			$params['month'] = $data->filters->month + 1;
 			$params['show_past'] = 'yes';
 		}
 		
-		if($data->filters->year = $this->input->post('year'))
+		if($data->filters->year = ($this->input->post('submit') == 'Filter'))
 		{
+			$data->filters->year = $this->input->post('year');
 			$params['year'] = $data->filters->year + 2013;
 			$params['show_past'] = 'yes';
 		}

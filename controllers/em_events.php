@@ -80,6 +80,7 @@ class Em_events extends Public_Controller
 			$color = $this->streams->entries->get_entries($params);
 			
 			$event['color_slug'] = $color['entries'][0]['color_slug'];
+			$event['hex'] = $color['entries'][0]['hex'];
 			
 			$events[] = $event;
 		}
@@ -87,6 +88,7 @@ class Em_events extends Public_Controller
 		$this->template
 			->set('pagination', $results['pagination'])
 			->set('events', $events)
+			->set_layout(Settings::get('em_list_layout'))
 			->build('front/list');
 	}
 	
@@ -140,6 +142,7 @@ class Em_events extends Public_Controller
 			$color = $this->streams->entries->get_entries($params);
 			
 			$event['color_slug'] = $color['entries'][0]['color_slug'];
+			$event['hex'] = $color['entries'][0]['hex'];
 			
 			$events[] = $event;
 		}
