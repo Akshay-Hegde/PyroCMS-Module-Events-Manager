@@ -3,7 +3,7 @@
 <ul>
 {{ categories }}
 
-	<li><a href="{{ url:site uri="events_manager/events/category" }}/{{ category_slug }}" style="color: {{ color_id:color_slug }};">{{ category }}</a></li>
+	<li><a href="{{ url:site uri="events_manager/events/category" }}/{{ category_slug }}" style="color: #{{ color_id:hex }};">{{ category }}</a></li>
 	
 {{ /categories }}
 </ul>
@@ -20,7 +20,7 @@
 	
 		<tr>
 			<td>{{ events_manager:display_timespan start=start end=end }}</td>
-			<td><a href="{{ url:site }}events_manager/event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}" style="color: {{ color_slug }};">{{ title }}</a></td>
+			<td><a href="{{ url:site }}events_manager/event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}" style="color: #{{ hex }};">{{ title }}</a></td>
 			<td>{{ location }}</td>
 		</tr>
 	
