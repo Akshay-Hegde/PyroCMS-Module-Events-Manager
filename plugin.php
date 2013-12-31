@@ -84,6 +84,7 @@ class Plugin_Events_manager extends Plugin
 		$this->load->driver('streams');
 		$limit = $this->attribute('limit', 5);
 		$show_past = $this->attribute('show_past', 'no');
+		$where = $this->attribute('where', null);
 		
 		$params = array(
 			'stream' => 'events',
@@ -94,6 +95,8 @@ class Plugin_Events_manager extends Plugin
 			'date_by' => 'start',
 			'show_past' => $show_past
 		);
+		
+		if($where) $params['where'] = $where;
 		
 		$events = $this->streams->entries->get_entries($params);
 
