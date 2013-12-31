@@ -237,7 +237,7 @@ class Em_calendar extends Public_Controller
 
 		   {heading_row_start}<tr id="calendar-heading">{/heading_row_start}
 
-		   {heading_title_cell}<th colspan="{colspan}">'.$previous.' '.anchor(site_url('events/calendar/'.$year.'/'.$month), '{heading}').' '.$next.'</th>{/heading_title_cell}
+		   {heading_title_cell}<th colspan="{colspan}">'.$previous.' '.anchor(site_url('events_manager/calendar/'.$year.'/'.$month), '{heading}').' '.$next.'</th>{/heading_title_cell}
 
 		   {heading_row_end}</tr>{/heading_row_end}
 
