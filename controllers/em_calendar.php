@@ -84,6 +84,7 @@ class Em_calendar extends Public_Controller
 				$color = $this->streams->entries->get_entries($params);
 
 				$event['color_slug'] = $color['entries'][0]['color_slug'];
+				$event['hex'] = $color['entries'][0]['hex'];
 
 				$events[] = $event;
 			}
@@ -180,7 +181,9 @@ class Em_calendar extends Public_Controller
 				'start' => $event->start,
 				'end' => $event->end,
 				'slug' => $event->slug,
-				'color_slug' => $color['color_slug']
+				'color_slug' => $color['color_slug'],
+				'hex' => $color['hex'],
+				'event' => (array) $event
 			);
 		}
 		
@@ -202,7 +205,9 @@ class Em_calendar extends Public_Controller
 			else
 			{
 				foreach($event_days as $day => $event)
-				{ // print_r($event_days[$day]); die();
+				{
+					echo '<pre>'; print_r($event_days[$day]); die();
+					
 					$cell = $this->template
 						->set_layout(null)
 						->set('events', array($event_days[$day][0]))
