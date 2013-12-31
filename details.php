@@ -517,7 +517,17 @@ class Module_Events_manager extends Module {
 		$this->load->library('files/files');
         $this->streams->utilities->remove_namespace('events_manager');
 		$this->db->delete('settings', array('module' => 'events_manager'));
-		Files::delete_folder(Settings::get('em_categories_folder_id'));
+		
+		// Delete files and then folder
+		$folder_id = Settings::get('em_categories_folder_id');
+		$files = Files::folder_contents($folder_id);
+		
+		foreach($files['data']['file'] as $file)
+		{
+			Files::delete_file($file->id);
+		}
+		
+		Files::delete_folder($folder_id);
 
         return true;
 	}
