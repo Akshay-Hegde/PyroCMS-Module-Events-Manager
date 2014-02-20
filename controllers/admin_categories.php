@@ -23,6 +23,8 @@ class Admin_categories extends Admin_Controller
     {
         parent::__construct();
 
+		role_or_die('events_manager', 'categories');
+
 		// Load lang
         $this->lang->load('events_manager');
 
@@ -57,7 +59,7 @@ class Admin_categories extends Admin_Controller
 			'columns' => array('category', 'color_id')
 		);
 		
-		$this->streams->cp->entries_table('categories', 'events_manager', 20, 'admin/events_manager/categories', true, $extra);
+		$this->streams->cp->entries_table('categories', 'events_manager', 20, 'admin/events_manager/categories/index', true, $extra);
 	}
 	
 	public function form($id = null)

@@ -23,6 +23,8 @@ class Admin_colors extends Admin_Controller
     {
         parent::__construct();
 
+		role_or_die('events_manager', 'colors');
+
 		// Load lang
         $this->lang->load('events_manager');
 
@@ -57,7 +59,7 @@ class Admin_colors extends Admin_Controller
 			'columns' => array('color', 'color_slug', 'hex')
 		);
 		
-		$this->streams->cp->entries_table('category_colors', 'events_manager', 20, 'admin/events_manager/colors', true, $extra);
+		$this->streams->cp->entries_table('category_colors', 'events_manager', 20, 'admin/events_manager/colors/index', true, $extra);
 	}
 	
 	public function form($id = null)
