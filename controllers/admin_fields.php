@@ -70,7 +70,7 @@ class Admin_fields extends Admin_Controller
 			'category_id'
 		);
 
-		$this->streams->cp->assignments_table('events', 'events_manager', 15, 'admin/events_manager/fields', true, $extra, $exclude);
+		$this->streams->cp->assignments_table('events', 'events_manager', 15, 'admin/events_manager/fields/index', true, $extra, $exclude);
 	}
 	
 	public function form($assign_id = null)
