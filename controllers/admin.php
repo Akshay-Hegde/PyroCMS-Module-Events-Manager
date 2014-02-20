@@ -103,7 +103,7 @@ class Admin extends Admin_Controller
 	
 	public function form($id = null)
 	{
-		if(group_has_role('events_manager', 'only_edit_created'))
+		if($id && !group_has_role('events_manager', 'edit_all'))
 		{
 			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
 			$user_id = $this->current_user->id;
@@ -133,7 +133,7 @@ class Admin extends Admin_Controller
 	
 	public function delete($id = 0)
 	{
-		if(group_has_role('events_manager', 'only_edit_created'))
+		if(!group_has_role('events_manager', 'edit_all'))
 		{
 			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
 			$user_id = $this->current_user->id;

@@ -6,4 +6,4 @@ $lang['events_manager:role_custom_fields'] = 'Custom Fields';
 $lang['events_manager:role_colors'] = 'Colors';
 $lang['events_manager:role_export'] = 'Export';
 $lang['events_manager:role_settings'] = 'Settings';
-$lang['events_manager:role_only_edit_created'] = 'Can only edit events they create';
+$lang['events_manager:role_edit_all'] = 'Can edit any event';
