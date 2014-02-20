@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '1.0.1';
+	public $version = '1.0.2';
 
 	public function info()
 	{
@@ -338,7 +338,7 @@ class Module_Events_manager extends Module {
 				'slug' => 'description',
 				'namespace' => 'events_manager',
 				'type' => 'wysiwyg',
-				'extra' => array('editor_type' => 'advanced'),
+				'extra' => array('editor_type' => 'advanced', 'allow_tags' => 'y'),
 				'assign' => 'events',
 				'title_column' => false,
 				'required' => true,
@@ -562,6 +562,23 @@ class Module_Events_manager extends Module {
 			}
 			
 			$old_version = '1.0.1';
+		}
+		
+		if($old_version == '1.0.1')
+		{
+			// Get field and update settings
+			$field = $this->streams->fields->get_field_assignments('description', 'events_manager');
+			$field_data = unserialize($field[0]->field_data);
+			$field_data['allow_tags'] = 'y';
+			
+			$data = array('field_data' => serialize($field_data));
+			
+			// No update in the streams driver to use active record
+			$update = $this->db->update('data_fields', $data, array('id' => $field[0]->id));
+			
+			if(! $update) return false;
+			
+			$old_version == '1.0.2';
 		}
 		
 		return true;
