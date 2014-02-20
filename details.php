@@ -32,7 +32,7 @@ class Module_Events_manager extends Module {
 				)
 			),
 			'roles' => array(
-				'categories', 'custom_fields', 'colors', 'settings', 'export'
+				'categories', 'custom_fields', 'colors', 'settings', 'export', 'only_edit_created'
 			)
 		);
 		

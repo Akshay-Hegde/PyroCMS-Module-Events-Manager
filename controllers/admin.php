@@ -103,6 +103,19 @@ class Admin extends Admin_Controller
 	
 	public function form($id = null)
 	{
+		if(group_has_role('events_manager', 'only_edit_created'))
+		{
+			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
+			$user_id = $this->current_user->id;
+			
+			if($event->created_by_user_id != $user_id)
+			{
+				$this->session->set_flashdata('error', 'You do not have permission to edit this event');
+				
+				redirect('admin/events_manager/index');
+			}
+		}
+		
 		$extra = array(
 			'return' => 'admin/events_manager',
 			'title' => $id ? 'Edit Event' : 'Add Event'
@@ -114,12 +127,25 @@ class Admin extends Admin_Controller
 		{
 			$skips = array('registration', 'limit');
 		}
-		
+
 		$this->streams->cp->entry_form('events', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
 	}
 	
 	public function delete($id = 0)
 	{
+		if(group_has_role('events_manager', 'only_edit_created'))
+		{
+			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
+			$user_id = $this->current_user->id;
+			
+			if($event->created_by_user_id != $user_id)
+			{
+				$this->session->set_flashdata('error', 'You do not have permission to delete this event');
+				
+				redirect('admin/events_manager/index');
+			}
+		}
+		
 		$this->load->model('search/search_index_m');
 		
 		$this->streams->entries->delete_entry($id, 'events', 'events_manager');
