@@ -46,6 +46,9 @@ This module was built because several of our clients needed a simple events mana
  * Plugin with 2 methods
  * Widget for displaying upcoming events
  * Events are index for searching in admin panel or the visitor's side
+* __Roles__
+ * Restrict access to Categories, Custom Fields, Colors, Export and Settings
+ * Unselecting "Can edit any event" will prevent users from editing and deleting events they did not create.
 
 ### Designers
 
