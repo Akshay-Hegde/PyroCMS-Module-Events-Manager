@@ -23,6 +23,8 @@ class Admin_categories extends Admin_Controller
     {
         parent::__construct();
 
+		role_or_die('events_manager', 'categories');
+
 		// Load lang
         $this->lang->load('events_manager');
 

@@ -23,6 +23,8 @@ class Admin_export extends Admin_Controller
     {
         parent::__construct();
 
+		role_or_die('events_manager', 'export');
+
 		// Load lang
         $this->lang->load('events_manager');
 

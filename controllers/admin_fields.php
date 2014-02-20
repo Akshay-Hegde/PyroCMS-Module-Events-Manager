@@ -23,6 +23,8 @@ class Admin_fields extends Admin_Controller
     {
         parent::__construct();
 
+		role_or_die('events_manager', 'custom_fields');
+
 		// Load lang
         $this->lang->load('events_manager');
 
