@@ -500,6 +500,19 @@ class Module_Events_manager extends Module {
 				'is_gui' => 1,
 				'module' => 'events_manager',
 				'order' => 70
+			),
+			array(
+				'slug' => 'em_list_layout',
+				'title' => 'List View Theme Layout',
+				'description' => 'Type in the name of the theme layout file you would like to use for the list view.',
+				'`default`' => 'default.html',
+				'`value`' => 'default.html',
+				'type' => 'text',
+				'`options`' => '',
+				'is_required' => 1,
+				'is_gui' => 1,
+				'module' => 'events_manager',
+				'order' => 60
 			)
 		);
 		// Let's try running our DB Forge Table and inserting some settings
