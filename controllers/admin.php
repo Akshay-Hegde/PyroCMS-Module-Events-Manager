@@ -24,7 +24,7 @@ class Admin extends Admin_Controller
         parent::__construct();
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		// Load assets
 		Asset::css('module::admin.css');
@@ -47,7 +47,7 @@ class Admin extends Admin_Controller
 		
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit' => Settings::get('records_per_page'),
 			'offset' => $offset,
 			'order_by' => 'start',
@@ -82,7 +82,7 @@ class Admin extends Admin_Controller
 			{
 				$params = array(
 					'stream' => 'registrations',
-					'namespace' => 'events_manager',
+					'namespace' => 'philsquare_events_manager',
 					'where' => '`event_id` = ' . $event['id']
 				);
 				
@@ -103,9 +103,9 @@ class Admin extends Admin_Controller
 	
 	public function form($id = null)
 	{
-		if($id && !group_has_role('events_manager', 'edit_all'))
+		if($id && !group_has_role('philsquare_events_manager', 'edit_all'))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
+			$event = $this->streams->entries->get_entry($id, 'events', 'philsquare_events_manager', false);
 			$user_id = $this->current_user->id;
 			
 			if($event->created_by_user_id != $user_id)
@@ -128,14 +128,14 @@ class Admin extends Admin_Controller
 			$skips = array('registration', 'limit');
 		}
 
-		$this->streams->cp->entry_form('events', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
+		$this->streams->cp->entry_form('events', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
 	}
 	
 	public function delete($id = 0)
 	{
-		if(!group_has_role('events_manager', 'edit_all'))
+		if(!group_has_role('philsquare_events_manager', 'edit_all'))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
+			$event = $this->streams->entries->get_entry($id, 'events', 'philsquare_events_manager', false);
 			$user_id = $this->current_user->id;
 			
 			if($event->created_by_user_id != $user_id)
@@ -148,19 +148,19 @@ class Admin extends Admin_Controller
 		
 		$this->load->model('search/search_index_m');
 		
-		$this->streams->entries->delete_entry($id, 'events', 'events_manager');
-		$this->search_index_m->drop_index('events_manager', 'event', $id);
+		$this->streams->entries->delete_entry($id, 'events', 'philsquare_events_manager');
+		$this->search_index_m->drop_index('philsquare_events_manager', 'event', $id);
 		$this->session->set_flashdata('error', 'Event was deleted.');
 		redirect('admin/events_manager');
 	}
 	
 	public function registrations($event_id)
 	{
-		$data->event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager', false);
+		$data->event = $this->streams->entries->get_entry($event_id, 'events', 'philsquare_events_manager', false);
 		
 		$params = array(
 			'stream' => 'registrations',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'where' => "`event_id` = '{$event_id}'"
 		);
 		
@@ -197,7 +197,7 @@ class Admin extends Admin_Controller
 				'event_id' => $event_id
 			);
 			
-			$result = $this->streams->entries->insert_entry($insert, 'registrations', 'events_manager');
+			$result = $this->streams->entries->insert_entry($insert, 'registrations', 'philsquare_events_manager');
 			
 			if($result)
 			{
@@ -214,7 +214,7 @@ class Admin extends Admin_Controller
 		}
 		else
 		{
-			$event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager');
+			$event = $this->streams->entries->get_entry($event_id, 'events', 'philsquare_events_manager');
 
 			$this->template
 				->title('Add Registrant to ' . $event->title)
@@ -225,8 +225,8 @@ class Admin extends Admin_Controller
 	
 	public function delete_registrant($registration_id)
 	{
-		$registration = $this->streams->entries->get_entry($registration_id, 'registrations', 'events_manager');
-		$result = $this->streams->entries->delete_entry($registration_id, 'registrations', 'events_manager');
+		$registration = $this->streams->entries->get_entry($registration_id, 'registrations', 'philsquare_events_manager');
+		$result = $this->streams->entries->delete_entry($registration_id, 'registrations', 'philsquare_events_manager');
 		
 		if($result)
 		{

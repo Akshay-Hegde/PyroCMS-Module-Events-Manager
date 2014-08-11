@@ -27,13 +27,13 @@ class Events_Events_manager {
     {
 		$event = (object) $trigger_data;
 		
-		if($event->stream->stream_namespace == 'events_manager' && $event->stream->stream_slug == 'events')
+		if($event->stream->stream_namespace == 'philsquare_events_manager' && $event->stream->stream_slug == 'events')
 		{
 			$event_data = (object) $trigger_data['insert_data'];
 
 			// @todo Need to add keywords
 			$this->ci->search_index_m->index(
-			    'events_manager',
+			    'philsquare_events_manager',
 			    'event',
 			    'events',
 			    $event->entry_id,
@@ -53,16 +53,16 @@ class Events_Events_manager {
 	{
 		$event = (object) $trigger_data;
 		
-		if($event->stream->stream_namespace == 'events_manager' && $event->stream->stream_slug == 'events')
+		if($event->stream->stream_namespace == 'philsquare_events_manager' && $event->stream->stream_slug == 'events')
 		{
 			$event_data = (object) $trigger_data['update_data'];
 
 			// @todo Figure out an better way to just update the search index entry
-			$this->ci->search_index_m->drop_index('events_manager', 'event', $event->entry_id);
+			$this->ci->search_index_m->drop_index('philsquare_events_manager', 'event', $event->entry_id);
 
 			// @todo Need to add keywords
 			$this->ci->search_index_m->index(
-			    'events_manager',
+			    'philsquare_events_manager',
 			    'event',
 			    'events',
 			    $event->entry_id,

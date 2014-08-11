@@ -23,10 +23,10 @@ class Admin_export extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('events_manager', 'export');
+		role_or_die('philsquare_events_manager', 'export');
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		// Load assets
 		Asset::css('module::admin.css');

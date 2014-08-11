@@ -18,7 +18,7 @@ class Em_events extends Public_Controller
         parent::__construct();
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		// Helpers
 		$this->load->helper('events');
@@ -36,7 +36,7 @@ class Em_events extends Public_Controller
 		// We always need the category list as a keyed array
 		$params = array(
 			'stream' => 'categories',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 		);
 
 		$categories = $this->streams->entries->get_entries($params);
@@ -52,7 +52,7 @@ class Em_events extends Public_Controller
 		
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit' => Settings::get('records_per_page'),
 			'order_by' => 'start',
 			'sort' => 'asc',
@@ -73,7 +73,7 @@ class Em_events extends Public_Controller
 			
 			$params = array(
 				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'where' => "`id` = '{$id}'"
 			);
 
@@ -99,7 +99,7 @@ class Em_events extends Public_Controller
 		// Exists?
 		$params = array(
 			'stream' => 'categories',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'where' => "`category_slug` = '{$slug}'"
 		);
 
@@ -111,7 +111,7 @@ class Em_events extends Public_Controller
 			
 			$params = array(
 				'stream' => 'events',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'limit' => Settings::get('records_per_page'),
 				'order_by' => 'start',
 				'sort' => 'asc',
@@ -135,7 +135,7 @@ class Em_events extends Public_Controller
 			
 			$params = array(
 				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'where' => "`id` = '{$id}'"
 			);
 
@@ -161,7 +161,7 @@ class Em_events extends Public_Controller
 		
 		$params = array(
 			'stream'    => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit'     => 1,
 			'date_by'   => 'start',
 			'where'     => "`slug` = '{$slug}'",
@@ -178,7 +178,7 @@ class Em_events extends Public_Controller
 		{
 			$params = array(
 				'stream' => 'registrations',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'where' => "`event_id` = " . $event['id']
 			);
 			
@@ -228,7 +228,7 @@ class Em_events extends Public_Controller
 						);
 						
 						// @todo Add verification
-						$insert = $this->streams->entries->insert_entry($entry, 'registrations', 'events_manager');
+						$insert = $this->streams->entries->insert_entry($entry, 'registrations', 'philsquare_events_manager');
 						
 						if($insert)
 						{

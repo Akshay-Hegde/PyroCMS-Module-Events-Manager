@@ -23,7 +23,7 @@ class Api extends Public_Controller
 	{
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit' => $this->input->post('limit', true),
 			'offset' => $this->input->post('offset', true),
 			'order_by' => 'start',

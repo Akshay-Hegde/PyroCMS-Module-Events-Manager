@@ -23,10 +23,10 @@ class Admin_colors extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('events_manager', 'colors');
+		role_or_die('philsquare_events_manager', 'colors');
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		// Load assets
 		Asset::css('module::admin.css');
@@ -59,7 +59,7 @@ class Admin_colors extends Admin_Controller
 			'columns' => array('color', 'color_slug', 'hex')
 		);
 		
-		$this->streams->cp->entries_table('category_colors', 'events_manager', 20, 'admin/events_manager/colors/index', true, $extra);
+		$this->streams->cp->entries_table('category_colors', 'philsquare_events_manager', 20, 'admin/events_manager/colors/index', true, $extra);
 	}
 	
 	public function form($id = null)
@@ -69,12 +69,12 @@ class Admin_colors extends Admin_Controller
 			'title' => $id ? 'Edit Color' : 'Add Color'
 		);
 		
-		$this->streams->cp->entry_form('category_colors', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra);
+		$this->streams->cp->entry_form('category_colors', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra);
 	}
 	
 	public function delete($id = 0)
 	{
-		$this->streams->entries->delete_entry($id, 'colors', 'events_manager');
+		$this->streams->entries->delete_entry($id, 'colors', 'philsquare_events_manager');
 		$this->session->set_flashdata('error', 'Color was deleted.');
 		redirect('admin/events_manager/colors');
 	}

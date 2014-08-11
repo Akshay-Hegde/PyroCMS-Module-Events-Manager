@@ -18,7 +18,7 @@ class Events_manager extends Public_Controller
         parent::__construct();
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		if($this->uri->segment(3) == '') redirect('events_manager/' . Settings::get('em_default_view'));
     }

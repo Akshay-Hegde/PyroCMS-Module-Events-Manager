@@ -18,7 +18,7 @@ class Em_calendar extends Public_Controller
         parent::__construct();
 
 		// Load lang
-        $this->lang->load('events_manager');
+        $this->lang->load('philsquare_events_manager');
 
 		// Helpers
 		$this->load->helper('events');
@@ -36,7 +36,7 @@ class Em_calendar extends Public_Controller
 		// We always need the category list as a keyed array
 		$params = array(
 			'stream' => 'categories',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 		);
 
 		$categories = $this->streams->entries->get_entries($params);
@@ -53,7 +53,7 @@ class Em_calendar extends Public_Controller
 		
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'order_by' => 'start',
 			'date_by' => 'start',
 			'month' => $month,
@@ -77,7 +77,7 @@ class Em_calendar extends Public_Controller
 
 				$params = array(
 					'stream' => 'category_colors',
-					'namespace' => 'events_manager',
+					'namespace' => 'philsquare_events_manager',
 					'where' => "`id` = '{$id}'"
 				);
 
@@ -116,7 +116,7 @@ class Em_calendar extends Public_Controller
 		// Exists?
 		$params = array(
 			'stream' => 'categories',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'where' => "`category_slug` = '{$slug}'"
 		);
 
@@ -131,7 +131,7 @@ class Em_calendar extends Public_Controller
 			
 			$params = array(
 				'stream' => 'events',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'order_by' => 'start',
 				'date_by' => 'start',
 				'month' => $month,
@@ -169,7 +169,7 @@ class Em_calendar extends Public_Controller
 			
 			$params = array(
 				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
+				'namespace' => 'philsquare_events_manager',
 				'where' => "`id` = '{$color_id}'"
 			);
 

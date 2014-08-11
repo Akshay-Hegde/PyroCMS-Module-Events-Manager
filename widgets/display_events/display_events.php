@@ -46,7 +46,7 @@ class Widget_Display_events extends Widgets
 		
 		$params = array(
 			'stream' => 'categories',
-			'namespace' => 'events_manager'
+			'namespace' => 'philsquare_events_manager'
 		);
 		
 		$results = $this->streams->entries->get_entries($params);
@@ -76,7 +76,7 @@ class Widget_Display_events extends Widgets
 		
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit' => $options['limit'],
 			'order_by' => 'start',
 			'sort' => 'asc',
