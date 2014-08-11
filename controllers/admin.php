@@ -30,6 +30,8 @@ class Admin extends Admin_Controller
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
+		$this->load->library(array('streambase', 'event'));
+		
 		// Templates use this lib
 		$this->load->library('table');
 		
@@ -38,25 +40,8 @@ class Admin extends Admin_Controller
     }
 
 	public function index($offset = 0)
-	{
-		$data->events = array();
-		
-		if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
-		
+	{		
 		$this->template->title('Upcoming Events');
-		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'philsquare_events_manager',
-			'limit' => Settings::get('records_per_page'),
-			'offset' => $offset,
-			'order_by' => 'start',
-			'sort' => 'asc',
-			'date_by' => 'start',
-			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_segment' => 4
-		);
 		
 		if($data->filters->month = ($this->input->post('submit') == 'Filter'))
 		{
@@ -72,7 +57,7 @@ class Admin extends Admin_Controller
 			$params['show_past'] = 'yes';
 		}
 		
-		$events = $this->streams->entries->get_entries($params);
+		$events = $this->event->getFuture();
 		
 		$data->pagination = $events['pagination'];
 		
