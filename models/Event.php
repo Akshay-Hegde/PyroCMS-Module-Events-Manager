@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Event extends StreamBase {
+class Event extends BaseModel {
 	
 	protected $stream = 'events';
 	

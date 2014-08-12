@@ -7,4 +7,4 @@
 
 $autoload['language'] = array('philsquare_events_manager');
 
-$autoload['model'] = array('streambase', 'event');
+$autoload['model'] = array('streammodel', 'basemodel', 'event');

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Registration extends StreamBase {
+class Registration extends BaseModel {
 	
 	protected $stream = 'registrations';
 	

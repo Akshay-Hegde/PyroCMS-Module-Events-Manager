@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class ModuleSetting extends StreamBase {
+class ModuleSetting extends BaseModel {
 	
 	protected $stream = 'settings';
 	

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Color extends StreamBase {
+class Color extends BaseModel {
 	
 	protected $stream = 'colors';
 	

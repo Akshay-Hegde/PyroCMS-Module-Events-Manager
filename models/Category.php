@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Category extends StreamBase {
+class Category extends BaseModel {
 	
 	protected $stream = 'categories';
 	

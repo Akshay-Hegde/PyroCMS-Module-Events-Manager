@@ -2,11 +2,9 @@
 
 // v1.0.0
 
-class StreamBase {
+class StreamModel {
 	
-	protected $namespace = 'philsquare_events_manager';
-	
-	protected $disable = 'id|created|image|updated|created_by';
+	protected $namespace = '';
 	
 	public function __construct()
 	{
