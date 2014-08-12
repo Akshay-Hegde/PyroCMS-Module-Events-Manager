@@ -23,7 +23,7 @@ class Admin_settings extends Admin_Controller
     {
         parent::__construct();
 
-		// role_or_die('classes_pro', 'classes');
+		role_or_die('philsquare_events_manager', 'settings');
     }
 
 	public function index()
