@@ -30,7 +30,7 @@ class Admin extends Admin_Controller
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
-		$this->load->library(array('streambase', 'event'));
+		$this->load->library(array('streambase', 'event', 'modulesetting'));
 		
 		// Templates use this lib
 		$this->load->library('table');
@@ -83,16 +83,16 @@ class Admin extends Admin_Controller
 	
 	public function form($id = null)
 	{
-		if($id && !group_has_role('philsquare_events_manager', 'edit_all'))
+		if($id && ! group_has_role('philsquare_events_manager', 'edit_all'))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'philsquare_events_manager', false);
+			$event = $this->event->get($id);
 			$user_id = $this->current_user->id;
 			
 			if($event->created_by_user_id != $user_id)
 			{
 				$this->session->set_flashdata('error', 'You do not have permission to edit this event');
 				
-				redirect('admin/events_manager/index');
+				redirect('admin/events_manager');
 			}
 		}
 		
@@ -103,7 +103,7 @@ class Admin extends Admin_Controller
 		
 		$skips = array();
 		
-		if(Settings::get('em_allow_registrations') == 'no')
+		if($this->modulesetting->get('allow_registrations') == 'no')
 		{
 			$skips = array('registration', 'limit');
 		}
@@ -113,9 +113,9 @@ class Admin extends Admin_Controller
 	
 	public function delete($id = 0)
 	{
-		if(!group_has_role('philsquare_events_manager', 'edit_all'))
+		if( ! group_has_role('philsquare_events_manager', 'edit_all'))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'philsquare_events_manager', false);
+			$event = $this->event->get($id);
 			$user_id = $this->current_user->id;
 			
 			if($event->created_by_user_id != $user_id)

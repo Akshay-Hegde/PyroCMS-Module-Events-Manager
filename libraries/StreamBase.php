@@ -16,6 +16,11 @@ class StreamBase {
 		$this->ci->load->driver('Streams');
 	}
 	
+	public function get($id)
+	{
+		return $this->ci->streams->entries->get_entry($id, $this->stream, $this->namespace, false);
+	}
+	
 	public function getAll()
 	{
 		return $this->ci->streams->entries->get_entries($this->getParams());
