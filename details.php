@@ -336,11 +336,11 @@ class Module_Events_manager extends Module {
 				
 				'title'        => array('title_column' => true, 'required' => true, 'unique' => false),
 				'slug'         => array('required' => true, 'unique' => false),
-				'image'        => array(),
-				'details'      => array('required' => true),
-				'category_id'  => array('required' => true),
 				'start'        => array('required' => true),
 				'end'          => array('required' => true),
+				'category_id'  => array('required' => true),
+				'details'      => array('required' => true),
+				'image'        => array(),
 				'location'     => array(),
 				'registration' => array(),
 				'limit'        => array()
