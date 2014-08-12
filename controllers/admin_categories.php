@@ -56,7 +56,7 @@ class Admin_categories extends Admin_Controller
 				)
 			),
 			
-			'columns' => array('category', 'color_id')
+			'columns' => array('title', 'color_id')
 		);
 		
 		$this->streams->cp->entries_table('categories', 'philsquare_events_manager', 20, 'admin/events_manager/categories/index', true, $extra);

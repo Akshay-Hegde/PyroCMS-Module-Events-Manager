@@ -42,7 +42,7 @@ class Admin_colors extends Admin_Controller
 	public function index($offset = 0)
 	{
 		$extra = array(
-			'title' => 'Category Colors',
+			'title' => 'Colors',
 			
 			'buttons' => array(
 				array(
@@ -56,10 +56,10 @@ class Admin_colors extends Admin_Controller
 				)
 			),
 			
-			'columns' => array('color', 'color_slug', 'hex')
+			'columns' => array('title', 'slug', 'hex')
 		);
 		
-		$this->streams->cp->entries_table('category_colors', 'philsquare_events_manager', 20, 'admin/events_manager/colors/index', true, $extra);
+		$this->streams->cp->entries_table('colors', 'philsquare_events_manager', 20, 'admin/events_manager/colors/index', true, $extra);
 	}
 	
 	public function form($id = null)
@@ -69,7 +69,7 @@ class Admin_colors extends Admin_Controller
 			'title' => $id ? 'Edit Color' : 'Add Color'
 		);
 		
-		$this->streams->cp->entry_form('category_colors', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra);
+		$this->streams->cp->entry_form('colors', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra);
 	}
 	
 	public function delete($id = 0)

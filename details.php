@@ -131,7 +131,7 @@ class Module_Events_manager extends Module {
 			'Events'
 		)) return false;
 			
-		if( ! $categoryColorStreamId = $this->streams->streams->add_stream(
+		if( ! $colorStreamId = $this->streams->streams->add_stream(
 			'Colors',
 			'colors',
 			'philsquare_events_manager',
