@@ -20,7 +20,7 @@ class Events_manager extends Public_Controller
 		// Load lang
         $this->lang->load('philsquare_events_manager');
 		
-		$this->load->library('modulesetting');
+		$this->load->model('modulesetting');
 		
 		$defaultView = $this->modulesetting->get('default_view');
 

@@ -32,6 +32,13 @@ class Event extends StreamBase {
 		return parent::getAll();
 	}
 	
+	public function getByCategoryIdAndRange($catId, $year, $month)
+	{
+		$this->where = "`category_id` = '{$catId}'";
+		
+		return $this->getRange($year, $month);
+	}
+	
 	public function delete()
 	{
 		$this->ci->load->model('search/search_index_m');

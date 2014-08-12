@@ -113,6 +113,6 @@ $autoload['language'] = array();
 
 // Autoloaded in MY_Controller
 //	permissions/permission_m', addons/module_m', 'pages/pages_m
-$autoload['model'] = array('StreamBase');
+$autoload['model'] = array('streambase');
 
 /* End of file autoload.php */

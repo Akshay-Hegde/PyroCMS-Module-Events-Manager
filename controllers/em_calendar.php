@@ -28,20 +28,15 @@ class Em_calendar extends Public_Controller
 		Asset::js('module::admin.js');
 		
 		// Templates use this lib
-		$this->load->library(array('table', 'streambase', 'event', 'modulesetting'));
+		$this->load->library(array('table'));
+		
+		$this->load->model(array('event', 'modulesetting', 'category', 'color'));
 		
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
-		
-		// We always need the category list as a keyed array
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'philsquare_events_manager',
-		);
 
-		$categories = $this->streams->entries->get_entries($params);
-		$this->categories = $categories['entries'];
-		$this->template->set('categories', $this->categories);
+		$categories = $this->category->getAll();
+		$this->template->set('categories', $categories['entries']);
     }
 	
 	public function index($year = null, $month = null, $day = null)
@@ -59,17 +54,11 @@ class Em_calendar extends Public_Controller
 			foreach($results['entries'] as $event)
 			{
 				$id = $event['category_id']['color_id'];
+				
+				$color = $this->color->get($id);
 
-				$params = array(
-					'stream' => 'colors',
-					'namespace' => 'philsquare_events_manager',
-					'where' => "`id` = '{$id}'"
-				);
-
-				$color = $this->streams->entries->get_entries($params);
-
-				$event['color_slug'] = $color['entries'][0]['slug'];
-				$event['hex'] = $color['entries'][0]['hex'];
+				$event['color_slug'] = $color->slug;
+				$event['hex'] = $color->hex;
 
 				$events[] = $event;
 			}
@@ -99,49 +88,30 @@ class Em_calendar extends Public_Controller
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
+		$layout = $this->modulesetting->get('calendar_layout');
 		
-		// Exists?
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'philsquare_events_manager',
-			'where' => "`category_slug` = '{$slug}'"
-		);
-
-		$results = $this->streams->entries->get_entries($params);
+		$category = $this->category->getBySlug($slug);
 		
-		if($results['total'])
-		{
-			$category = $results['entries'][0];
+		if($category)
+		{			
+			$this->template->title('Calendar Events listed as "' . $category->title . '"');
 			
-			$this->template->title('Calendar Events listed as "' . $category['category'] . '"');
-			$id = $category['id'];
-			
-			$params = array(
-				'stream' => 'events',
-				'namespace' => 'philsquare_events_manager',
-				'order_by' => 'start',
-				'date_by' => 'start',
-				'month' => $month,
-				'year' => $year,
-				'where' => "`category_id` = '{$id}'"
-			);
-
-			$results = $this->streams->entries->get_entries($params);
+			$results = $this->event->getByCategoryIdAndRange($category->id, $year, $month);
 
 			$events = $results['entries'];
-			
-			$results = $this->streams->entries->get_entries($params);
 		}
 		
 		$data = $this->_build($events, $year, $month, $slug);
 		
 		$this->template
-			->set_layout(Settings::get('em_calendar_layout'))
+			->set_layout($layout)
 			->build('front/calendar/view', $data);
 	}
 	
 	private function _build($events, $year, $month, $category = null)
 	{
+		$dayOption = $this->modulesetting->get('calendar_day_option');
+		
 		$event_list = array();
 		
 		// Assign events to keyed array ex. $var[4] = array(event1, event2, etc.)
@@ -152,31 +122,24 @@ class Em_calendar extends Public_Controller
 			$event_day = date('j', $event->start);
 			
 			// We need the color
-			$color_id = $event->category_id['color_id'];
+			$colorId = $event->category_id['color_id'];
 			
-			$params = array(
-				'stream' => 'colors',
-				'namespace' => 'philsquare_events_manager',
-				'where' => "`id` = '{$color_id}'"
-			);
-
-			$results = $this->streams->entries->get_entries($params);
-			$color = $results['entries'][0];
+			$color = $this->color->get($colorId);
 
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
 				'start' => $event->start,
 				'end' => $event->end,
 				'slug' => $event->slug,
-				'color_slug' => $color['slug'],
-				'hex' => $color['hex'],
+				'color_slug' => $color->slug,
+				'hex' => $color->hex,
 				'event' => (array) $event
 			);
 		}
 		
 		if(isset($event_days))
 		{
-			if(Settings::get('em_calendar_day_option') == 'list')
+			if($dayOption == 'list')
 			{
 				foreach($event_days as $day => $event)
 				{
