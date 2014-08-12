@@ -22,7 +22,7 @@ class Events_manager extends Public_Controller
 		
 		$this->load->library('modulesetting');
 		
-		$defaultView = $this->modulesettting->get('default_view');
+		$defaultView = $this->modulesetting->get('default_view');
 
 		if($this->uri->segment(3) == '') redirect('events_manager/' . $defaultView);
     }

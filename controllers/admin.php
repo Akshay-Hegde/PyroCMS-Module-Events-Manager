@@ -30,7 +30,7 @@ class Admin extends Admin_Controller
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
-		$this->load->library(array('streambase', 'event', 'modulesetting', 'registration'));
+		$this->load->library(array('event', 'modulesetting', 'registration'));
 		
 		// Templates use this lib
 		$this->load->library('table');

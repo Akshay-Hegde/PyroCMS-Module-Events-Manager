@@ -28,7 +28,7 @@ class Em_calendar extends Public_Controller
 		Asset::js('module::admin.js');
 		
 		// Templates use this lib
-		$this->load->library(array('table', 'event'));
+		$this->load->library(array('table', 'streambase', 'event', 'modulesetting'));
 		
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
@@ -48,17 +48,11 @@ class Em_calendar extends Public_Controller
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
-
-		$this->template->title('Upcoming Events');
+		$layout = $this->modulesetting->get('calendar_layout');
 		
 		if($day)
-		{
-			// @todo format setting
-			$this->template->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)));
-			
-			$results = $this->event->getRange($year, $month, $day)
-			
-			$results = $this->streams->entries->get_entries($params);
+		{			
+			$results = $this->event->getRange($year, $month, $day);
 			
 			// Need colors
 			// @todo DRY
@@ -67,33 +61,35 @@ class Em_calendar extends Public_Controller
 				$id = $event['category_id']['color_id'];
 
 				$params = array(
-					'stream' => 'category_colors',
+					'stream' => 'colors',
 					'namespace' => 'philsquare_events_manager',
 					'where' => "`id` = '{$id}'"
 				);
 
 				$color = $this->streams->entries->get_entries($params);
 
-				$event['color_slug'] = $color['entries'][0]['color_slug'];
+				$event['color_slug'] = $color['entries'][0]['slug'];
 				$event['hex'] = $color['entries'][0]['hex'];
 
 				$events[] = $event;
 			}
 
 			$this->template
+				->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)))
 				->set('events', $events)
 				->build('front/list');
 		}
 		else
 		{
-			$results = $this->streams->entries->get_entries($params);
+			$results = $this->event->getRange($year, $month);
 
 			$events = $results['entries'];
 
 			$data = $this->_build($events, $year, $month);
 
 			$this->template
-				->set_layout(Settings::get('em_calendar_layout'))
+				->title('Upcoming Events')
+				->set_layout($layout)
 				->build('front/calendar/view', $data);
 		}
 		
@@ -159,7 +155,7 @@ class Em_calendar extends Public_Controller
 			$color_id = $event->category_id['color_id'];
 			
 			$params = array(
-				'stream' => 'category_colors',
+				'stream' => 'colors',
 				'namespace' => 'philsquare_events_manager',
 				'where' => "`id` = '{$color_id}'"
 			);
@@ -172,7 +168,7 @@ class Em_calendar extends Public_Controller
 				'start' => $event->start,
 				'end' => $event->end,
 				'slug' => $event->slug,
-				'color_slug' => $color['color_slug'],
+				'color_slug' => $color['slug'],
 				'hex' => $color['hex'],
 				'event' => (array) $event
 			);
@@ -197,7 +193,7 @@ class Em_calendar extends Public_Controller
 			{
 				foreach($event_days as $day => $event)
 				{
-					echo '<pre>'; print_r($event_days[$day]); die();
+					// echo '<pre>'; print_r($event_days[$day]); die();
 					
 					$cell = $this->template
 						->set_layout(null)

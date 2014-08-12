@@ -12,8 +12,8 @@ class StreamBase {
 	
 	public function __construct()
 	{
-		$this->ci =& get_instance();
-		$this->ci->load->driver('Streams');
+		// $this->ci =& get_instance();
+		// $this->ci->load->driver('Streams');
 	}
 	
 	public function get($id)

@@ -3,7 +3,7 @@
 <ul>
 {{ categories }}
 
-	<li><a href="{{ url:site uri="events_manager/events/category" }}/{{ category_slug }}" style="color: #{{ color_id:hex }};">{{ category }}</a></li>
+	<li><a href="{{ url:site uri="events_manager/events/category" }}/{{ slug }}" style="color: #{{ color_id:hex }};">{{ title }}</a></li>
 	
 {{ /categories }}
 </ul>
