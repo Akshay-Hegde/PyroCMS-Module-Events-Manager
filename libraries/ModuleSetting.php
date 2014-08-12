@@ -15,6 +15,11 @@ class ModuleSetting extends StreamBase {
 		
 		$settings = $settings['entries'][0];
 		
+		if(is_array($settings[$field]))
+		{
+			return $settings[$field]['key'];
+		}
+		
 		return $settings[$field];
 	}
 	

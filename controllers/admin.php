@@ -100,6 +100,23 @@ class Admin extends Admin_Controller
 		if($this->modulesetting->get('allow_registrations') == 'no')
 		{
 			$skips = array('registration', 'limit');
+			$tabs = false;
+		}
+		
+		else
+		{
+			$tabs = array(
+			    array(
+			        'title'     => "General Information",
+			        'id'        => 'general-tab',
+			        'fields'    => array('title', 'slug', 'details', 'start', 'end', 'category_id', 'location')
+			    ),
+			    array(
+			        'title'     => "Registration",
+			        'id'        => 'additional-tab',
+			        'fields'    => array('registration', 'limit')
+			    )
+			);
 		}
 		
 		$this->streams->cp->entry_form(
@@ -109,7 +126,8 @@ class Admin extends Admin_Controller
 			$id,
 			true,
 			$extra,
-			$skips
+			$skips,
+			$tabs
 		);
 	}
 	

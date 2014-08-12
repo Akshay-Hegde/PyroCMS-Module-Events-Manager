@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Events Manager module
+ * Events manager module
  *
  *
  * @author 		Phil Martinez - Philsquare Dev Team
@@ -23,14 +23,10 @@ class Admin_settings extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('philsquare_events_manager', 'settings');
+		// role_or_die('classes_pro', 'classes');
 
 		// Load lang
         $this->lang->load('philsquare_events_manager');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
 		
 		// Templates use this lib
 		$this->load->library('table');
@@ -41,7 +37,11 @@ class Admin_settings extends Admin_Controller
 
 	public function index()
 	{
-		$this->template->build('admin/settings/index');
+		$extra = array(
+			'return' => 'admin/events_manager/settings',
+			'title' => 'Edit Settings'
+		);
+		
+		$this->streams->cp->entry_form('settings', 'philsquare_events_manager', 'edit', 1, true, $extra);
 	}
-
 }
