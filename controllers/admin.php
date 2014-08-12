@@ -71,6 +71,15 @@ class Admin extends Admin_Controller
 			redirect('admin/events_manager/index');
 		}
 		
+		$fields = $this->streams->streams->get_assignments('events', 'philsquare_events_manager');
+		
+		$regFields = array('registration', 'limit');
+		
+		foreach($fields as $field)
+		{
+			if( ! in_array($field->field_slug, $regFields)) $genFields[] = $field->field_slug;
+		}
+		
 		$extra = array(
 			'return' => 'admin/events_manager',
 			'title' => $id ? 'Edit Event' : 'Add Event'
@@ -90,12 +99,12 @@ class Admin extends Admin_Controller
 			    array(
 			        'title'     => "General Information",
 			        'id'        => 'general-tab',
-			        'fields'    => array('title', 'slug', 'details', 'start', 'end', 'category_id', 'location')
+			        'fields'    => $genFields
 			    ),
 			    array(
 			        'title'     => "Registration",
 			        'id'        => 'additional-tab',
-			        'fields'    => array('registration', 'limit')
+			        'fields'    => $regFields
 			    )
 			);
 		}
