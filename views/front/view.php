@@ -11,8 +11,8 @@
 			<span>{{ category_id:category }}</span>
 		</div>
 		
-		<div class="description">
-			{{ description }}
+		<div class="details">
+			{{ details }}
 		</div>
 	</div>
 	

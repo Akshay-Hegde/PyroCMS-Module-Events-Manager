@@ -66,7 +66,7 @@ class Admin_export extends Admin_Controller
 			$this->load->dbutil();
 			$this->load->helper('download');
 			
-			$sql = "SELECT `title`, `start`, `end`, `description`, `location` FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
+			$sql = "SELECT `title`, `start`, `end`, `details`, `location` FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
 
 			$query = $this->db->query($sql);
 			$data = $this->dbutil->csv_from_result($query);

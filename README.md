@@ -20,7 +20,7 @@ This module was built because several of our clients needed a simple events mana
 
 * __Events__
  * Add, edit and delete events
- * Events start with basic fields. These fields are title, start, end, description, location and category.
+ * Events start with basic fields. These fields are title, start, end, details, location and category.
  * Events can be displayed as a list or calendar view.
  * In the calendar mode, events can be listed on the days or the day can link to the list of events on that day (change in "Settings").
 * __Categories__
