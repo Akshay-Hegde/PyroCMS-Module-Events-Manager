@@ -63,8 +63,7 @@ class Admin_fields extends Admin_Controller
 			'start',
 			'end',
 			'introduction',
-			'description',
-			'location',
+			'details',
 			'registration',
 			'limit',
 			'category_id'
