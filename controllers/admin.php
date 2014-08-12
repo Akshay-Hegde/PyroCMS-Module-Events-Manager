@@ -30,7 +30,7 @@ class Admin extends Admin_Controller
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
-		$this->load->library(array('streambase', 'event', 'modulesetting'));
+		$this->load->library(array('streambase', 'event', 'modulesetting', 'registration'));
 		
 		// Templates use this lib
 		$this->load->library('table');
@@ -83,17 +83,11 @@ class Admin extends Admin_Controller
 	
 	public function form($id = null)
 	{
-		if($id && ! group_has_role('philsquare_events_manager', 'edit_all'))
+		if($id && ! $this->_canEdit($id))
 		{
-			$event = $this->event->get($id);
-			$user_id = $this->current_user->id;
+			$this->session->set_flashdata('error', 'You do not have permission to edit this event');
 			
-			if($event->created_by_user_id != $user_id)
-			{
-				$this->session->set_flashdata('error', 'You do not have permission to edit this event');
-				
-				redirect('admin/events_manager');
-			}
+			redirect('admin/events_manager/index');
 		}
 		
 		$extra = array(
@@ -107,108 +101,79 @@ class Admin extends Admin_Controller
 		{
 			$skips = array('registration', 'limit');
 		}
-
-		$this->streams->cp->entry_form('events', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
+		
+		$this->streams->cp->entry_form(
+			'events',
+			'philsquare_events_manager',
+			$id ? 'edit' : 'new',
+			$id,
+			true,
+			$extra,
+			$skips
+		);
 	}
 	
 	public function delete($id = 0)
 	{
-		if( ! group_has_role('philsquare_events_manager', 'edit_all'))
+		if($id && ! $this->_canEdit($id))
 		{
-			$event = $this->event->get($id);
-			$user_id = $this->current_user->id;
+			$this->session->set_flashdata('error', 'You do not have permission to delete this event');
 			
-			if($event->created_by_user_id != $user_id)
-			{
-				$this->session->set_flashdata('error', 'You do not have permission to delete this event');
-				
-				redirect('admin/events_manager/index');
-			}
+			redirect('admin/events_manager/index');
 		}
 		
-		$this->load->model('search/search_index_m');
+		if($this->event->delete($id))
+		{
+			$this->session->set_flashdata('error', 'Event was deleted.');
+		}
 		
-		$this->streams->entries->delete_entry($id, 'events', 'philsquare_events_manager');
-		$this->search_index_m->drop_index('philsquare_events_manager', 'event', $id);
-		$this->session->set_flashdata('error', 'Event was deleted.');
+		else
+		{
+			$this->session->set_flashdata('error', 'Unable to delete event.');
+		}
+		
 		redirect('admin/events_manager');
 	}
 	
 	public function registrations($event_id)
 	{
-		$data->event = $this->streams->entries->get_entry($event_id, 'events', 'philsquare_events_manager', false);
-		
-		$params = array(
-			'stream' => 'registrations',
-			'namespace' => 'philsquare_events_manager',
-			'where' => "`event_id` = '{$event_id}'"
-		);
-		
-		$data->registrants = $this->streams->entries->get_entries($params);
-		
+		$event = $this->event->get($event_id);
+		$registrants = $this->registration->getRegistrants($event_id);
+
 		$this->template
-			->title('Registrants for ' . $data->event->title)
+			->title('Registrants for ' . $event->title)
 			->set_partial('contents', 'admin/registrants/list')
-			->build('admin/tpl/container', $data);
+			->build('admin/tpl/container', compact('event', 'registrants'));
 	}
 	
-	public function add_registrant($event_id)
-	{
-		$validation_rules = array(
-			array(
-				'field' => 'name',
-				'label' => 'Name',
-				'rules'	=> 'required|trim|max_length[100]'
-			),
-			array(
-				'field' => 'email',
-				'label' => 'Email',
-				'rules'	=> 'required|valid_email|max_length[255]'
-			)
+	public function add_registrant($eventId)
+	{		
+		$extra = array(
+			'return' => 'admin/events_manager/registrations/' . $eventId,
+			'title' => 'Add Registrant'
 		);
-
-		$this->form_validation->set_rules($validation_rules);
 		
-		if($this->form_validation->run())
-		{
-			$insert = array(
-				'name' => $this->input->post('name'),
-				'email' => $this->input->post('email'),
-				'event_id' => $event_id
-			);
-			
-			$result = $this->streams->entries->insert_entry($insert, 'registrations', 'philsquare_events_manager');
-			
-			if($result)
-			{
-				// Success
-				$this->session->set_flashdata('success', 'Added registrant successfully');
-			}
-			else
-			{
-				// Failure adding answers
-				$this->session->set_flashdata('error', 'Unable to add registrant');
-			}
-			
-			redirect("admin/events_manager/registrations/$event_id");
-		}
-		else
-		{
-			$event = $this->streams->entries->get_entry($event_id, 'events', 'philsquare_events_manager');
-
-			$this->template
-				->title('Add Registrant to ' . $event->title)
-				->set_partial('contents', 'admin/registrants/add')
-				->build('admin/tpl/container');
-		}
+		$skips = array();
+		
+		$this->streams->cp->entry_form(
+			'registrations',
+			'philsquare_events_manager',
+			'new',
+			null,
+			true,
+			$extra,
+			$skips,
+			false,
+			array('event_id'),
+			array('event_id' => $eventId)
+		);
 	}
 	
-	public function delete_registrant($registration_id)
+	public function delete_registrant($registrationId, $eventId)
 	{
-		$registration = $this->streams->entries->get_entry($registration_id, 'registrations', 'philsquare_events_manager');
-		$result = $this->streams->entries->delete_entry($registration_id, 'registrations', 'philsquare_events_manager');
+		$results = $this->registration->delete($registrationId);
 		
-		if($result)
+		if($results)
 		{
 			// Success
 			$this->session->set_flashdata('success', 'Registrant deleted');
@@ -219,6 +184,21 @@ class Admin extends Admin_Controller
 			$this->session->set_flashdata('error', 'There was an issue.');
 		}
 		
-		redirect("admin/events_manager/registrations/$registration->event_id");
+		redirect("admin/events_manager/registrations/$eventId");
+	}
+	
+	private function _canEdit($eventId)
+	{
+		if(group_has_role('philsquare_events_manager', 'edit_all')) return true;
+		
+		$event = $this->event->get($id);
+		$userId = $this->current_user->id;
+		
+		if($event->created_by_user_id == $userId)
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }

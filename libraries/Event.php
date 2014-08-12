@@ -30,4 +30,12 @@ class Event extends StreamBase {
 		return parent::getAll();
 	}
 	
+	public function delete()
+	{
+		$this->ci->load->model('search/search_index_m');
+		$this->ci->search_index_m->drop_index($this->namespace, 'event', $id);
+		
+		return parent::delete($id);
+	}
+	
 }

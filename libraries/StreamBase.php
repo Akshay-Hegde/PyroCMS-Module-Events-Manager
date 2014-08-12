@@ -26,6 +26,11 @@ class StreamBase {
 		return $this->ci->streams->entries->get_entries($this->getParams());
 	}
 	
+	public function delete($id)
+	{
+		return $this->ci->streams->entries->delete_entry($id, $this->stream, $this->namespace);
+	}
+	
 	private function getParams()
 	{
 		$entries_params = $this->ci->streams->entries->entries_params;

@@ -39,7 +39,7 @@ class Events_Events_manager {
 			    $event->entry_id,
 			    'events_manager/event/' . date('Y/m/d/', strtotime($event_data->start)) . $event_data->slug,
 			    $event_data->title,
-			    $event_data->description,
+			    $event_data->details,
 			    array(
 			        'cp_edit_uri'    => 'admin/events_manager/form/' . $event->entry_id,
 			        'cp_delete_uri'  => 'admin/events_manager/delete/' . $event->entry_id
