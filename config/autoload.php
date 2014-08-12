@@ -54,7 +54,7 @@ $autoload['packages'] = array();
 |	* pyrocache and session is loaded by MY_Controller to allow the site_ref to be set
 */
 
-$autoload['libraries'] = array('streambase');
+$autoload['libraries'] = array();
 
 
 /*
@@ -113,6 +113,6 @@ $autoload['language'] = array();
 
 // Autoloaded in MY_Controller
 //	permissions/permission_m', addons/module_m', 'pages/pages_m
-$autoload['model'] = array();
+$autoload['model'] = array('StreamBase');
 
 /* End of file autoload.php */
