@@ -40,28 +40,23 @@ class Admin extends Admin_Controller
     }
 
 	public function index($offset = 0)
-	{		
-		$this->template->title('Upcoming Events');
+	{
+		$filters['month'] = $this->input->post('month');
+		$filters['year'] = $this->input->post('year');
 		
-		if($data->filters->month = ($this->input->post('submit') == 'Filter'))
+		if($filters['month'])
 		{
-			$data->filters->month = $this->input->post('month');
-			$params['month'] = $data->filters->month + 1;
-			$params['show_past'] = 'yes';
+			$events = $this->event->getRange($filters['month'], $filters['year']);
 		}
 		
-		if($data->filters->year = ($this->input->post('submit') == 'Filter'))
+		else
 		{
-			$data->filters->year = $this->input->post('year');
-			$params['year'] = $data->filters->year + 2013;
-			$params['show_past'] = 'yes';
+			$events = $this->event->getFuture();
 		}
 		
-		$events = $this->event->getFuture();
+		$pagination = $events['pagination'];
 		
-		$data->pagination = $events['pagination'];
-		
-		foreach($events['entries'] as $event)
+		foreach($events['entries'] as $index => $event)
 		{
 			if($event['registration']['key'] == 'yes')
 			{
@@ -76,14 +71,14 @@ class Admin extends Admin_Controller
 				$event['registration_count'] = $registrations['total'];
 			}
 			
-			$data->events[] = $event;
+			$events['entries'][$index] = $event;
 		}
-		
-		// Set partials and boom!
+
 		$this->template
+			->title('Upcoming Events')
 			->set_partial('filters', 'admin/events/filters')
 			->set_partial('contents', 'admin/events/list')
-			->build('admin/tpl/container', $data);
+			->build('admin/tpl/container', compact('filters', 'events', 'pagination'));
 	}
 	
 	public function form($id = null)

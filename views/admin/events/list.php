@@ -6,7 +6,7 @@
 
 	$this->table->set_heading('Date', 'Event', '&nbsp;');
 	
-	foreach($events as $event)
+	foreach($events['entries'] as $event)
 	{
 		$event = (object) $event;
 		
