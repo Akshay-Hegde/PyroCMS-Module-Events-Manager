@@ -12,7 +12,7 @@ class StreamBase {
 	
 	public function __construct()
 	{
-		
+
 	}
 	
 	public function paginate($seg)
