@@ -98,7 +98,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('philsquare_events_manager');
 
 
 /*
@@ -113,6 +113,6 @@ $autoload['language'] = array();
 
 // Autoloaded in MY_Controller
 //	permissions/permission_m', addons/module_m', 'pages/pages_m
-$autoload['model'] = array('streambase');
+$autoload['model'] = array('streambase', 'event');
 
 /* End of file autoload.php */

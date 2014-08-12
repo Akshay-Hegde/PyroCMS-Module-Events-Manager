@@ -25,9 +25,6 @@ class Admin_fields extends Admin_Controller
 
 		role_or_die('philsquare_events_manager', 'custom_fields');
 
-		// Load lang
-        $this->lang->load('philsquare_events_manager');
-
 		// Load assets
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');

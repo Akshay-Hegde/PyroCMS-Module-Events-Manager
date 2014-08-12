@@ -17,12 +17,6 @@ class Em_calendar extends Public_Controller
     {
         parent::__construct();
 
-		// Load lang
-        $this->lang->load('philsquare_events_manager');
-
-		// Helpers
-		$this->load->helper('events');
-
 		// Load assets
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
@@ -30,7 +24,7 @@ class Em_calendar extends Public_Controller
 		// Templates use this lib
 		$this->load->library(array('table'));
 		
-		$this->load->model(array('event', 'modulesetting', 'category', 'color'));
+		$this->load->model(array('modulesetting', 'category', 'color'));
 		
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));

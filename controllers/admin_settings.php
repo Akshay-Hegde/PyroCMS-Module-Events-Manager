@@ -24,9 +24,6 @@ class Admin_settings extends Admin_Controller
         parent::__construct();
 
 		// role_or_die('classes_pro', 'classes');
-
-		// Load lang
-        $this->lang->load('philsquare_events_manager');
 		
 		// Templates use this lib
 		$this->load->library('table');
