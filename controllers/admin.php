@@ -26,7 +26,7 @@ class Admin extends Admin_Controller
 		$this->load->model(array('modulesetting', 'registration'));
     }
 
-	public function index($offset = 0)
+	public function index()
 	{
 		$filters['month'] = $this->input->post('month');
 		$filters['year'] = $this->input->post('year');
@@ -38,7 +38,7 @@ class Admin extends Admin_Controller
 		
 		else
 		{
-			$events = $this->event->upcoming()->paginate(2)->getAll();
+			$events = $this->event->upcoming()->paginate(3)->getAll();
 		}
 		
 		$pagination = $events['pagination'];

@@ -28,6 +28,8 @@ class Admin_colors extends Admin_Controller
 
 	public function index($offset = 0)
 	{
+		$limit = Settings::get('records_per_page');
+		
 		$extra = array(
 			'title' => 'Colors',
 			
@@ -49,7 +51,7 @@ class Admin_colors extends Admin_Controller
 		$this->streams->cp->entries_table(
 			'colors',
 			'philsquare_events_manager',
-			20,
+			$limit,
 			'admin/events_manager/colors/index',
 			true,
 			$extra

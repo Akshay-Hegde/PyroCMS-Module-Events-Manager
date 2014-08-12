@@ -28,6 +28,8 @@ class Admin_fields extends Admin_Controller
 
 	public function index($offset = 0)
 	{
+		$limit = Settings::get('records_per_page');
+		
 		$extra = array(
 			'title' => 'Event Custom Fields',
 			
@@ -59,7 +61,7 @@ class Admin_fields extends Admin_Controller
 		$this->streams->cp->assignments_table(
 			'events',
 			'philsquare_events_manager',
-			15,
+			$limit,
 			'admin/events_manager/fields/index',
 			true,
 			$extra,
