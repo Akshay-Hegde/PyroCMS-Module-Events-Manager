@@ -28,12 +28,6 @@ class Admin extends Admin_Controller
 		Asset::js('module::admin.js');
 		
 		$this->load->model(array('modulesetting', 'registration'));
-		
-		// Templates use this lib
-		// $this->load->library('table');
-		
-		// Set CP GUI table attr
-		// $this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
     }
 
 	public function index($offset = 0)

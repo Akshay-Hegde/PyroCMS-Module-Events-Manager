@@ -1,47 +1,40 @@
 <?php if(isset($template['partials']['filters'])) echo $template['partials']['filters'] ?>
 
 <?php if($registrants['total']): ?>
-
-<?php
-
-	$this->table->set_heading('Name', 'Email', '&nbsp;');
 	
-	foreach($registrants['entries'] as $registrant)
-	{
-		$registrant = (object) $registrant;
-		
-		// Column Data
-		$column1 = $registrant->name;
-		$column2 = $registrant->email;
-		
-		// Actions
-		$action1 = anchor(site_url("admin/events_manager/delete_registrant/$registrant->id/$event->id"), 'Remove', 'class="button confirm"');		
-		
-		$actions = array(
-			'data' => $action1,
-			'class' => "actions"
-		);
-		
-		$this->table->add_row($column1, $column2, $actions);
-	}
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($registrants['entries'] as $registrant): ?>
+				<tr>
+					<td><?php echo $registrant['name'] ?></td>
+					<td><?php echo $registrant['email'] ?></td>
+					<td class="actions">
+						<?php echo anchor(site_url("admin/events_manager/delete_registrant/{$registrant['id']}/$event->id"), 'Remove', 'class="button confirm"') ?>
+					</td>
+				</tr>
+			<?php endforeach ?>
+		</tbody>
+	</table>
 
-	echo $this->table->generate();
-	
-	echo $registrants['pagination'];
+	<?php echo $registrants['pagination'] ?>
 
-?>
-
-<br>
-
-
+	<br>
 
 <?php else: ?>
 
-<div class="no_data">No Registrants</div>
+	<div class="no_data">No Registrants</div>
 
 <?php endif ?>
 
 <div class="table_action_buttons">
+	
 	<?php echo anchor(site_url('admin/events_manager/add_registrant/' . $event->id), 'Add Registrant', 'class="btn blue"') ?>
 	<?php echo anchor(site_url('admin/events_manager/form/' . $event->id), 'Edit Event', 'class="btn orange"') ?>
 	<?php echo anchor(site_url('admin/events_manager'), '&larr; Back to list', 'class="btn gray"') ?>

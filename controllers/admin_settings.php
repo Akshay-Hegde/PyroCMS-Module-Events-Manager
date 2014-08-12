@@ -24,12 +24,6 @@ class Admin_settings extends Admin_Controller
         parent::__construct();
 
 		// role_or_die('classes_pro', 'classes');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set CP GUI table attr
-		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
     }
 
 	public function index()
