@@ -38,7 +38,7 @@ class Admin extends Admin_Controller
 		
 		else
 		{
-			$events = $this->event->upcoming()->getAll();
+			$events = $this->event->upcoming()->paginate(2)->getAll();
 		}
 		
 		$pagination = $events['pagination'];
