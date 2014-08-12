@@ -46,7 +46,7 @@ class Admin extends Admin_Controller
 		
 		if($filters['month'])
 		{
-			$events = $this->event->getRange($filters['month'], $filters['year']);
+			$events = $this->event->getRange($filters['year'], $filters['month']);
 		}
 		
 		else

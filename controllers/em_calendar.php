@@ -28,7 +28,7 @@ class Em_calendar extends Public_Controller
 		Asset::js('module::admin.js');
 		
 		// Templates use this lib
-		$this->load->library('table');
+		$this->load->library(array('table', 'event'));
 		
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
@@ -51,21 +51,12 @@ class Em_calendar extends Public_Controller
 
 		$this->template->title('Upcoming Events');
 		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'philsquare_events_manager',
-			'order_by' => 'start',
-			'date_by' => 'start',
-			'month' => $month,
-			'year' => $year
-		);
-		
 		if($day)
 		{
 			// @todo format setting
 			$this->template->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)));
 			
-			$params['day'] = $day;
+			$results = $this->event->getRange($year, $month, $day)
 			
 			$results = $this->streams->entries->get_entries($params);
 			

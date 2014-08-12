@@ -22,10 +22,12 @@ class Event extends StreamBase {
 		return parent::getAll();
 	}
 	
-	public function getRange($month, $year)
+	public function getRange($year, $month, $day = null)
 	{
 		$this->month = $month;
 		$this->year = $year;
+		
+		if($day) $this->day = $day;
 
 		return parent::getAll();
 	}
