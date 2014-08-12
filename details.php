@@ -253,8 +253,7 @@ class Module_Events_manager extends Module {
 				'name' => 'Email',
 				'slug' => 'email',
 				'namespace' => 'philsquare_events_manager',
-				'type' => 'text',
-				'extra' => array('max_length' => 255)
+				'type' => 'email'
 			),
 			array(
 				'name' => 'Image',
@@ -268,7 +267,7 @@ class Module_Events_manager extends Module {
 				'slug'      => 'default_view',
 				'namespace' => 'philsquare_events_manager',
 				'type'      => 'choice',
-				'extra' => array('choice_data' => "calendar : Calendar\nList : List", 'choice_type' => 'radio', 'default_value' => 'calendar')
+				'extra' => array('choice_data' => "calendar : Calendar\nevents : List", 'choice_type' => 'radio', 'default_value' => 'calendar')
 			),
 			array(
 				'name'      => 'Calendar Day Option',

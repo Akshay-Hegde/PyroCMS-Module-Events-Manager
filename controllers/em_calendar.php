@@ -90,15 +90,22 @@ class Em_calendar extends Public_Controller
 		$year = $year ? $year : date('Y');
 		$layout = $this->modulesetting->get('calendar_layout');
 		
-		$category = $this->category->getBySlug($slug);
+		// $category = $this->category->getBySlug($slug);
+		
+		$category = $this->category->where('slug', $slug)->first();
 		
 		if($category)
-		{			
-			$this->template->title('Calendar Events listed as "' . $category->title . '"');
+		{
+			$this->template->title('Calendar Events listed as "' . $category['title'] . '"');
 			
-			$results = $this->event->getByCategoryIdAndRange($category->id, $year, $month);
+			$results = $this->event->getByCategoryIdAndRange($category['id'], $year, $month);
 
 			$events = $results['entries'];
+		}
+		
+		else
+		{
+			show_404();
 		}
 		
 		$data = $this->_build($events, $year, $month, $slug);

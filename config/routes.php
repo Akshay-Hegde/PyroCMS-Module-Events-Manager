@@ -22,7 +22,7 @@
 // front
 $route['(events_manager)/events'] = 'em_events/index';
 $route['(events_manager)/events/category(/:any)'] = 'em_events/category$2';
-$route['(events_manager)/events/page(/:num)'] = 'em_events/index$2';
+$route['(events_manager)/events(/:num)'] = 'em_events/index$2';
 $route['(events_manager)/event(/:any)'] = 'em_events/event$2';
 
 $route['(events_manager)/calendar'] = 'em_calendar/index';

@@ -15,6 +15,15 @@ class StreamBase {
 		
 	}
 	
+	public function paginate($seg)
+	{
+		$this->limit = Settings::get('records_per_page');
+		$this->paginate = 'yes';
+		$this->pag_segment = $seg;
+		
+		return $this;
+	}
+	
 	public function get($id)
 	{
 		return $this->ci->streams->entries->get_entry($id, $this->stream, $this->namespace, false);
@@ -23,6 +32,47 @@ class StreamBase {
 	public function getAll()
 	{
 		return $this->ci->streams->entries->get_entries($this->getParams());
+	}
+	
+	public function where($field, $operator = null, $value = null)
+	{
+		// Assume "=" and $operator is the $value
+		if (func_num_args() == 2)
+		{
+			$value = $operator;
+			$this->where = "`$field` = '{$value}'";
+			
+			return $this;
+		}
+		
+		$this->where = "`$field` $operator '{$value}'";
+		
+		return $this;
+	}
+	
+	public function first()
+	{
+		$query = $this->getAll();
+		
+		if($query['total']) return $query['entries'][0];
+		
+		return false;
+	}
+	
+	public function date($year, $month = null, $day = null)
+	{
+		$this->year = $year;
+		
+		if($month) $this->month = $month;
+		
+		if($day) $this->day = $day;
+		
+		return $this;
+	}
+	
+	public function insert($data)
+	{
+		return $this->ci->streams->entries->insert_entry($data, $this->stream, $this->namespace);
 	}
 	
 	public function delete($id)

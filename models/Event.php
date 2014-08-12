@@ -15,9 +15,11 @@ class Event extends StreamBase {
 		$this->ci =& get_instance();
 	}
 	
-	public function getFuture()
+	public function getFuture($pag = null, $seg = null)
 	{		
 		$this->show_past = 'no';
+		
+		if($pag) return $this->getPaginated($seg);
 
 		return parent::getAll();
 	}
@@ -30,13 +32,6 @@ class Event extends StreamBase {
 		if($day) $this->day = $day;
 
 		return parent::getAll();
-	}
-	
-	public function getByCategoryIdAndRange($catId, $year, $month)
-	{
-		$this->where = "`category_id` = '{$catId}'";
-		
-		return $this->getRange($year, $month);
 	}
 	
 	public function delete()
