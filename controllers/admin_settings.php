@@ -33,6 +33,13 @@ class Admin_settings extends Admin_Controller
 			'title' => 'Edit Settings'
 		);
 		
-		$this->streams->cp->entry_form('settings', 'philsquare_events_manager', 'edit', 1, true, $extra);
+		$this->streams->cp->entry_form(
+			'settings',
+			'philsquare_events_manager',
+			'edit',
+			1,
+			true,
+			$extra
+		);
 	}
 }

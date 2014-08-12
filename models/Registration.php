@@ -9,11 +9,4 @@ class Registration extends StreamBase {
 		$this->ci =& get_instance();
 	}
 	
-	public function getRegistrants($eventId)
-	{
-		$this->where = "`event_id` = '{$eventId}'";
-		
-		return parent::getAll();
-	}
-	
 }

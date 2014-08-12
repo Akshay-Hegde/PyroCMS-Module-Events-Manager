@@ -21,13 +21,7 @@ class Em_calendar extends Public_Controller
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
-		// Templates use this lib
-		$this->load->library(array('table'));
-		
 		$this->load->model(array('modulesetting', 'category', 'color'));
-		
-		// Set calendar
-		$this->table->set_template(array('table_open'  => '<table>'));
 
 		$categories = $this->category->getAll();
 		$this->template->set('categories', $categories['entries']);
@@ -41,7 +35,7 @@ class Em_calendar extends Public_Controller
 		
 		if($day)
 		{			
-			$results = $this->event->getRange($year, $month, $day);
+			$results = $this->event->date($year, $month, $day)->getAll();
 			
 			// Need colors
 			// @todo DRY
@@ -64,7 +58,7 @@ class Em_calendar extends Public_Controller
 		}
 		else
 		{
-			$results = $this->event->getRange($year, $month);
+			$results = $this->event->date($year, $month)->getAll();
 
 			$events = $results['entries'];
 
@@ -84,15 +78,15 @@ class Em_calendar extends Public_Controller
 		$year = $year ? $year : date('Y');
 		$layout = $this->modulesetting->get('calendar_layout');
 		
-		// $category = $this->category->getBySlug($slug);
-		
 		$category = $this->category->where('slug', $slug)->first();
 		
 		if($category)
 		{
 			$this->template->title('Calendar Events listed as "' . $category['title'] . '"');
 			
-			$results = $this->event->getByCategoryIdAndRange($category['id'], $year, $month);
+			$results = $this->event->where('category_id', $category['id'])
+				->date($year, $month)
+				->getAll();
 
 			$events = $results['entries'];
 		}

@@ -8,8 +8,6 @@ class StreamBase {
 	
 	protected $disable = 'id|created|image|updated|created_by';
 	
-	protected $params = array();
-	
 	public function __construct()
 	{
 
@@ -57,6 +55,22 @@ class StreamBase {
 		if($query['total']) return $query['entries'][0];
 		
 		return false;
+	}
+	
+	public function upcoming()
+	{
+		$this->show_upcoming = 'yes';
+		$this->show_past = 'no';
+		
+		return $this;
+	}
+	
+	public function past()
+	{
+		$this->show_upcoming = 'no';
+		$this->show_past = 'yes';
+		
+		return $this;
 	}
 	
 	public function date($year, $month = null, $day = null)

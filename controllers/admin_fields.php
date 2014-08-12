@@ -24,10 +24,6 @@ class Admin_fields extends Admin_Controller
         parent::__construct();
 
 		role_or_die('philsquare_events_manager', 'custom_fields');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
     }
 
 	public function index($offset = 0)
@@ -60,12 +56,29 @@ class Admin_fields extends Admin_Controller
 			'category_id'
 		);
 
-		$this->streams->cp->assignments_table('events', 'philsquare_events_manager', 15, 'admin/events_manager/fields/index', true, $extra, $exclude);
+		$this->streams->cp->assignments_table(
+			'events',
+			'philsquare_events_manager',
+			15,
+			'admin/events_manager/fields/index',
+			true,
+			$extra,
+			$exclude
+		);
 	}
 	
 	public function form($assign_id = null)
 	{
-		$this->streams->cp->field_form('events', 'philsquare_events_manager', $assign_id ? 'edit' : 'new', 'admin/events_manager/fields', $assign_id, array(), true, array());
+		$this->streams->cp->field_form(
+			'events',
+			'philsquare_events_manager',
+			$assign_id ? 'edit' : 'new',
+			'admin/events_manager/fields',
+			$assign_id,
+			array(),
+			true,
+			array()
+		);
 	}
 	
 	public function delete($assign_id)

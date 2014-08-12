@@ -38,7 +38,7 @@ class Em_events extends Public_Controller
 		$events = array();
 		$layout = $this->modulesetting->get('list_layout');
 		
-		$results = $this->event->paginate(3)->getFuture();
+		$results = $this->event->paginate(3)->upcoming()->getAll();
 		
 		// Need colors
 		// @todo DRY

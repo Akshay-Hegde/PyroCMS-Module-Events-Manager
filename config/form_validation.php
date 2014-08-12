@@ -1,5 +1,11 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+| -------------------------------------------------------------------
+| FORM VALIDATION
+| -------------------------------------------------------------------
+*/
+
 $config = array(
 	
 	'add-registrant' => array(

@@ -7,20 +7,5 @@ class Category extends StreamBase {
 	public function __construct()
 	{
 		$this->ci =& get_instance();
-	}
-	
-	public function getBySlug($slug)
-	{
-		$this->where = "`slug` = '{$slug}'";
-		
-		$query = parent::getAll();
-		
-		if($query['total'])
-		{
-			return parent::get($query['entries'][0]['id']);
-		}
-		
-		return false;
-	}
-	
+	}	
 }

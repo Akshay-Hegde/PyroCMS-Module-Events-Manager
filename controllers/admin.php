@@ -22,10 +22,6 @@ class Admin extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
 		
 		$this->load->model(array('modulesetting', 'registration'));
     }
@@ -37,12 +33,12 @@ class Admin extends Admin_Controller
 		
 		if($filters['month'])
 		{
-			$events = $this->event->getRange($filters['year'], $filters['month']);
+			$events = $this->event->date($filters['year'], $filters['month'])->getAll();
 		}
 		
 		else
 		{
-			$events = $this->event->getFuture();
+			$events = $this->event->upcoming()->getAll();
 		}
 		
 		$pagination = $events['pagination'];
@@ -51,13 +47,7 @@ class Admin extends Admin_Controller
 		{
 			if($event['registration']['key'] == 'yes')
 			{
-				$params = array(
-					'stream' => 'registrations',
-					'namespace' => 'philsquare_events_manager',
-					'where' => '`event_id` = ' . $event['id']
-				);
-				
-				$registrations = $this->streams->entries->get_entries($params);
+				$registrations = $this->registration->where('event_id', $event['id'])->getAll();
 				
 				$event['registration_count'] = $registrations['total'];
 			}
@@ -147,7 +137,7 @@ class Admin extends Admin_Controller
 	public function registrations($event_id)
 	{
 		$event = $this->event->get($event_id);
-		$registrants = $this->registration->getRegistrants($event_id);
+		$registrants = $this->registration->where('event_id', $event_id)->getAll();
 
 		$this->template
 			->title('Registrants for ' . $event->title)

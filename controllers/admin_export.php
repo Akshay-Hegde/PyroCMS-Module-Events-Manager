@@ -24,16 +24,10 @@ class Admin_export extends Admin_Controller
         parent::__construct();
 
 		role_or_die('philsquare_events_manager', 'export');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
     }
 
 	public function index()
-	{
-		$this->template->title('Export Events to a CSV file');
-		
+	{		
 		// @todo add validation
 		if($_POST)
 		{
@@ -78,6 +72,7 @@ class Admin_export extends Admin_Controller
 
 			// Set partials and boom!
 			$this->template
+				->title('Export Events to a CSV file')
 				->set_partial('contents', 'admin/export/filters')
 				->build('admin/tpl/container', $data);
 		}

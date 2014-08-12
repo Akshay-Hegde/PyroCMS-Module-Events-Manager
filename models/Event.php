@@ -15,25 +15,6 @@ class Event extends StreamBase {
 		$this->ci =& get_instance();
 	}
 	
-	public function getFuture($pag = null, $seg = null)
-	{		
-		$this->show_past = 'no';
-		
-		if($pag) return $this->getPaginated($seg);
-
-		return parent::getAll();
-	}
-	
-	public function getRange($year, $month, $day = null)
-	{
-		$this->month = $month;
-		$this->year = $year;
-		
-		if($day) $this->day = $day;
-
-		return parent::getAll();
-	}
-	
 	public function delete()
 	{
 		$this->ci->load->model('search/search_index_m');

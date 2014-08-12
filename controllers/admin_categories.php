@@ -24,10 +24,6 @@ class Admin_categories extends Admin_Controller
         parent::__construct();
 
 		role_or_die('philsquare_events_manager', 'categories');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
     }
 
 	public function index($offset = 0)
@@ -50,7 +46,14 @@ class Admin_categories extends Admin_Controller
 			'columns' => array('title', 'color_id')
 		);
 		
-		$this->streams->cp->entries_table('categories', 'philsquare_events_manager', 20, 'admin/events_manager/categories/index', true, $extra);
+		$this->streams->cp->entries_table(
+			'categories',
+			'philsquare_events_manager',
+			20,
+			'admin/events_manager/categories/index',
+			true,
+			$extra
+		);
 	}
 	
 	public function form($id = null)
@@ -60,7 +63,14 @@ class Admin_categories extends Admin_Controller
 			'title' => $id ? 'Edit Category' : 'Add Category'
 		);
 		
-		$this->streams->cp->entry_form('categories', 'philsquare_events_manager', $id ? 'edit' : 'new', $id, true, $extra);
+		$this->streams->cp->entry_form(
+			'categories',
+			'philsquare_events_manager',
+			$id ? 'edit' : 'new',
+			$id,
+			true,
+			$extra
+		);
 	}
 	
 	public function delete($id = 0)
