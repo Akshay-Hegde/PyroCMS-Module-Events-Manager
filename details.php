@@ -605,7 +605,7 @@ class Module_Events_manager extends Module {
                 );
             }
 
-            $this->db->insert_batch('philsquare_events_manager_events');
+            $this->db->insert_batch('philsquare_events_manager_events', $data);
 
             $data = array();
             foreach ($categories as $category)
@@ -626,6 +626,8 @@ class Module_Events_manager extends Module {
                 );
             }
 
+            $this->db->insert_batch('philsquare_events_manager_categories', $data);
+
             $data = array();
             foreach ($colors as $color)
             {
@@ -643,6 +645,8 @@ class Module_Events_manager extends Module {
                 );
             }
 
+            $this->db->insert_batch('philsquare_events_manager_colors', $data);
+
             $data = array();
             foreach ($registrations as $registration)
             {
@@ -659,6 +663,8 @@ class Module_Events_manager extends Module {
 
                 );
             }
+
+            $this->db->insert_batch('philsquare_events_manager_registrations', $data);
         }
 		
 		return true;
