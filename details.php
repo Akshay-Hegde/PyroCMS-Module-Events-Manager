@@ -554,6 +554,99 @@ class Module_Events_manager extends Module {
             );
 
             $this->db->where('stream_namespace', 'events_manager')->update('data_streams', $data);
+
+            $data = array(
+                'field_namespace' => 'philsquare_events_manager'
+            );
+
+            $this->db->where('field_namespace', 'events_manager')->update('data_fields', $data);
+
+            // New table names
+            $this->dbforge->rename_table('em_categories', 'philsquare_events_manager_categories');
+            $this->dbforge->rename_table('em_category_colors', 'philsquare_events_manager_colors');
+            $this->dbforge->rename_table('em_events', 'philsquare_events_manager_events');
+            $this->dbforge->rename_table('em_registrations', 'philsquare_events_manager_registrations');
+
+            // Move settings
+            if( ! $settingStreamId = $this->streams->streams->add_stream(
+                'Settings',
+                'settings',
+                'philsquare_events_manager',
+                'philsquare_events_manager_',
+                'Events Manager Settings'
+            )) return false;
+
+            $fields = array(
+                array(
+                    'name'      => 'Default View',
+                    'slug'      => 'default_view',
+                    'namespace' => 'philsquare_events_manager',
+                    'type'      => 'choice',
+                    'extra' => array('choice_data' => "calendar : Calendar\nevents : List", 'choice_type' => 'radio', 'default_value' => 'calendar')
+                ),
+                array(
+                    'name'      => 'Calendar Day Option',
+                    'slug'      => 'calendar_day_option',
+                    'namespace' => 'philsquare_events_manager',
+                    'type'      => 'choice',
+                    'extra' => array('choice_data' => "list : Show Events\nlink : Link to Day View", 'choice_type' => 'radio', 'default_value' => 'list')
+                ),
+                array(
+                    'name'      => 'Enable Registrations',
+                    'slug'      => 'allow_registrations',
+                    'namespace' => 'philsquare_events_manager',
+                    'type'      => 'choice',
+                    'extra' => array('choice_data' => "no : No\nyes : Yes", 'choice_type' => 'radio', 'default_value' => 'no')
+                ),
+                array(
+                    'name' => 'Calendar Layout',
+                    'slug' => 'calendar_layout',
+                    'namespace' => 'philsquare_events_manager',
+                    'type' => 'text',
+                    'extra' => array('max_length' => 40)
+                ),
+                array(
+                    'name' => 'List Layout',
+                    'slug' => 'list_layout',
+                    'namespace' => 'philsquare_events_manager',
+                    'type' => 'text',
+                    'extra' => array('max_length' => 40)
+                )
+            );
+
+            $this->streams->fields->add_fields($fields);
+
+            $assignments = array(
+
+                'settings' => array(
+
+                    'default_view' => array('instructions' => 'Calendar or list view', 'required' => true),
+                    'calendar_day_option' => array(),
+                    'allow_registrations' => array('instructions' => 'Enabling this will allow you to optionally accept registration for your events. Currently, the registration does not require the registrant to login and only acquires their name and email.'),
+                    'calendar_layout' => array('instructions' => 'Type in the name of the theme layout file you would like to use for the calendar view.'),
+                    'list_layout' => array('instructions' => 'Type in the name of the theme layout file you would like to use for the list view.')
+
+                )
+
+            );
+
+            foreach($assignments as $stream => $fields)
+            {
+                foreach($fields as $field => $assign_data)
+                {
+                    $this->streams->fields->assign_field('philsquare_events_manager', $stream, $field, $assign_data);
+                }
+            }
+
+            $settings = array(
+                'default_view' => Settings::get('em_default_view'),
+                'calendar_day_option' => Settings::get('em_calendar_day_option'),
+                'allow_registrations' => Setting::get('em_allow_registrations'),
+                'calendar_layout' => Settings::get('em_calendar_layout'),
+                'list_layout' => Settings::get('em_list_layout') ?: 'default.html'
+            );
+
+            $this->streams->entries->insert_entry($settings, 'settings', 'philsquare_events_manager');
         }
 		
 		return true;
