@@ -553,7 +553,7 @@ class Module_Events_manager extends Module {
                 'stream_prefix' => 'philsquare_events_manager_'
             );
 
-            $this->db->where('stream_namespace', 'events_manager')->update($this->site_ref . '_events_manager', $data);
+            $this->db->where('stream_namespace', 'events_manager')->update('data_streams', $data);
         }
 		
 		return true;
