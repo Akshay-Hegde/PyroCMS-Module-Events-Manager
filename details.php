@@ -548,13 +548,13 @@ class Module_Events_manager extends Module {
         if($old_version == '1.0.2')
         {
             // Get current data
-            $events = $this->db->from('em_events')->get()->row_result();
-            $categories = $this->db->from('em_categories')->get()->row_results();
-            $colors = $this->db->from('em_category_colors')->get()->row_results();
-            $registrations = $this->db->from('em_category_registrations')->get()->row_results();
+            $events = $this->db->from('em_events')->get()->result();
+            $categories = $this->db->from('em_categories')->get()->result();
+            $colors = $this->db->from('em_category_colors')->get()->result();
+            $registrations = $this->db->from('em_registrations')->get()->result();
 
             // Uninstall and Re-install
-            $this->streams->utilities->remove_namespace('philsquare_events_manager');
+            $this->streams->utilities->remove_namespace('events_manager');
             $this->install();
 
             // Move settings
