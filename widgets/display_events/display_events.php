@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Display Events
+ * Events Manager module
  *
  *
  * @author 		Philsquare Dev Team
