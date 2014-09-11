@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '1.0.2';
+	public $version = '1.0.3';
 
 	public function info()
 	{
@@ -544,6 +544,17 @@ class Module_Events_manager extends Module {
 			
 			$old_version == '1.0.2';
 		}
+
+        if($old_version == '1.0.2')
+        {
+            // New namespace
+            $data = array(
+                'stream_namespace' => 'philsquare_events_manager',
+                'stream_prefix' => 'philsquare_events_manager_'
+            );
+
+            $this->db->where('stream_namespace', 'events_manager')->update($this->site_ref . '_events_manager', $data);
+        }
 		
 		return true;
 	}
