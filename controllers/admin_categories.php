@@ -26,7 +26,7 @@ class Admin_categories extends Admin_Controller
 		role_or_die('philsquare_events_manager', 'categories');
     }
 
-	public function index($offset = 0)
+	public function index()
 	{
 		$limit = Settings::get('records_per_page');
 		

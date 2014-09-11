@@ -22,4 +22,5 @@ $route['events_manager/admin/fields(/:any)?'] = 'admin_fields$1';
 $route['events_manager/admin/colors(/:any)?'] = 'admin_colors$1';
 $route['events_manager/admin/export(/:any)?'] = 'admin_export$1';
 $route['events_manager/admin/settings(/:any)?'] = 'admin_settings$1';
-$route['events_manager/admin(/:any)?'] = 'admin/index';
+//$route['events_manager/admin(/:any)?'] = 'admin';
+//$route['events_manager/admin(/:any)?'] = 'admin/index';

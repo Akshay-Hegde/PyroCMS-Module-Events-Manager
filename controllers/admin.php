@@ -28,6 +28,8 @@ class Admin extends Admin_Controller
 
 	public function index()
 	{
+        if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
+
 		$filters['month'] = $this->input->post('month');
 		$filters['year'] = $this->input->post('year');
 		
@@ -38,7 +40,7 @@ class Admin extends Admin_Controller
 		
 		else
 		{
-			$events = $this->event->upcoming()->paginate(3)->getAll();
+			$events = $this->event->upcoming()->paginate(4)->getAll();
 		}
 		
 		$pagination = $events['pagination'];
