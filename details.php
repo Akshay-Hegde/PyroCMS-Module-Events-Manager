@@ -647,6 +647,8 @@ class Module_Events_manager extends Module {
             );
 
             $this->streams->entries->insert_entry($settings, 'settings', 'philsquare_events_manager');
+
+            $this->db->delete('settings', array('module', 'events_manager'));
         }
 		
 		return true;
