@@ -582,7 +582,83 @@ class Module_Events_manager extends Module {
 
             $this->db->delete('settings', array('module' => 'events_manager'));
 
-            print_r($events); die();
+            foreach($events as $event)
+            {
+                $data[] = array(
+
+                    'id' => $event->id,
+                    'created' => $event->created,
+                    'updated' => $event->updated,
+                    'created_by' => $event->created_by,
+                    'ordering_count' => $event->ordering_count,
+                    'title' => $event->title,
+                    'slug' => $event->slug,
+                    'start' => $event->start,
+                    'end' => $event->end,
+                    'details' => $event->description,
+                    'category_id' => $event->category_id,
+                    'image' => null,
+                    'location' => $event->location,
+                    'registration' => $event->registration,
+                    'limit' => $event->limit
+
+                );
+            }
+
+            $this->db->insert_batch('philsquare_events_manager_events');
+
+            $data = array();
+            foreach ($categories as $category)
+            {
+                $data[] = array(
+
+                    'id' => $category->id,
+                    'created' => $category->created,
+                    'updated' => $category->updated,
+                    'created_by' => $category->created_by,
+                    'ordering_count' => $category->ordering_count,
+                    'title' => $category->category,
+                    'slug' => $category->category_slug,
+                    'description' => $category->description,
+                    'color_id' => $category->color_id,
+                    'image' => $category->category_image,
+
+                );
+            }
+
+            $data = array();
+            foreach ($colors as $color)
+            {
+                $data[] = array(
+
+                    'id' => $color->id,
+                    'created' => $color->created,
+                    'updated' => $color->updated,
+                    'created_by' => $color->created_by,
+                    'ordering_count' => $color->ordering_count,
+                    'title' => $color->color,
+                    'slug' => $color->color_slug,
+                    'hex' => $color->hex,
+
+                );
+            }
+
+            $data = array();
+            foreach ($registrations as $registration)
+            {
+                $data[] = array(
+
+                    'id' => $registration->id,
+                    'created' => $registration->created,
+                    'updated' => $registration->updated,
+                    'created_by' => $registration->created_by,
+                    'ordering_count' => $registration->ordering_count,
+                    'name' => $registration->name,
+                    'email' => $registration->email,
+                    'event_id' => $registration->event_id,
+
+                );
+            }
         }
 		
 		return true;
