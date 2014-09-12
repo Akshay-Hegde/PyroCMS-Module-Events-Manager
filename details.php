@@ -545,113 +545,117 @@ class Module_Events_manager extends Module {
 			$old_version == '1.0.2';
 		}
 
-//        if($old_version == '1.0.2')
-//        {
-//            // Get current data
-//            $events = $this->db->from('em_events')->get()->result();
-//            $categories = $this->db->from('em_categories')->get()->result();
-//            $colors = $this->db->from('em_category_colors')->get()->result();
-//            $registrations = $this->db->from('em_registrations')->get()->result();
-//            $settings = array(
-//                'default_view' => $this->settings->get('em_default_view'),
-//                'calendar_day_option' => $this->settings->get('em_calendar_day_option'),
-//                'allow_registrations' => $this->settings->get('em_allow_registrations'),
-//                'calendar_layout' => $this->settings->get('em_calendar_layout'),
-//                'list_layout' => $this->settings->get('em_list_layout') ?: 'default.html'
-//            );
-//
-//            // Uninstall and Re-install
-//            $this->streams->utilities->remove_namespace('events_manager');
-//            $this->install();
-//
-//            $this->streams->entries->update_entry(1, $settings, 'settings', 'philsquare_events_manager');
-//
-//            $this->db->delete('settings', array('module' => 'events_manager'));
-//
-//            foreach($events as $event)
-//            {
-//                $data[] = array(
-//
-//                    'id' => $event->id,
-//                    'created' => $event->created,
-//                    'updated' => $event->updated,
-//                    'created_by' => $event->created_by,
-//                    'ordering_count' => $event->ordering_count,
-//                    'title' => $event->title,
-//                    'slug' => $event->slug,
-//                    'start' => $event->start,
-//                    'end' => $event->end,
-//                    'details' => $event->description,
-//                    'category_id' => $event->category_id,
-//                    'image' => null,
-//                    'location' => $event->location,
-//                    'registration' => $event->registration,
-//                    'limit' => $event->limit
-//
-//                );
-//            }
-//
-//            $this->db->insert_batch('philsquare_events_manager_events', $data);
-//
-//            $data = array();
-//            foreach ($categories as $category)
-//            {
-//                $data[] = array(
-//
-//                    'id' => $category->id,
-//                    'created' => $category->created,
-//                    'updated' => $category->updated,
-//                    'created_by' => $category->created_by,
-//                    'ordering_count' => $category->ordering_count,
-//                    'title' => $category->category,
-//                    'slug' => $category->category_slug,
-//                    'description' => $category->description,
-//                    'color_id' => $category->color_id,
-//                    'image' => $category->category_image,
-//
-//                );
-//            }
-//
-//            $this->db->insert_batch('philsquare_events_manager_categories', $data);
-//
-//            $data = array();
-//            foreach ($colors as $color)
-//            {
-//                $data[] = array(
-//
-//                    'id' => $color->id,
-//                    'created' => $color->created,
-//                    'updated' => $color->updated,
-//                    'created_by' => $color->created_by,
-//                    'ordering_count' => $color->ordering_count,
-//                    'title' => $color->color,
-//                    'slug' => $color->color_slug,
-//                    'hex' => $color->hex,
-//
-//                );
-//            }
-//
-//            $this->db->insert_batch('philsquare_events_manager_colors', $data);
-//
-//            $data = array();
-//            foreach ($registrations as $registration)
-//            {
-//                $data[] = array(
-//
-//                    'id' => $registration->id,
-//                    'created' => $registration->created,
-//                    'updated' => $registration->updated,
-//                    'created_by' => $registration->created_by,
-//                    'ordering_count' => $registration->ordering_count,
-//                    'name' => $registration->name,
-//                    'email' => $registration->email,
-//                    'event_id' => $registration->event_id,
-//
-//                );
-//            }
-//
-//            $this->db->insert_batch('philsquare_events_manager_registrations', $data);
-//        }
+        if($old_version == '1.0.2')
+        {
+            // Get current data
+            $events = $this->db->from('em_events')->get()->result();
+            $categories = $this->db->from('em_categories')->get()->result();
+            $colors = $this->db->from('em_category_colors')->get()->result();
+            $registrations = $this->db->from('em_registrations')->get()->result();
+            $settings = array(
+                'default_view' => $this->settings->get('em_default_view'),
+                'calendar_day_option' => $this->settings->get('em_calendar_day_option'),
+                'allow_registrations' => $this->settings->get('em_allow_registrations'),
+                'calendar_layout' => $this->settings->get('em_calendar_layout'),
+                'list_layout' => $this->settings->get('em_list_layout') ?: 'default.html'
+            );
+
+            // Uninstall and Re-install
+            $this->streams->utilities->remove_namespace('events_manager');
+            $this->install();
+
+            // Delete default cat and col
+            $this->db->truncate('philsquare_events_manager_categories');
+            $this->db->truncate('philsquare_events_manager_colors');
+
+            $this->streams->entries->update_entry(1, $settings, 'settings', 'philsquare_events_manager');
+
+            $this->db->delete('settings', array('module' => 'events_manager'));
+
+            foreach($events as $event)
+            {
+                $data[] = array(
+
+                    'id' => $event->id,
+                    'created' => $event->created,
+                    'updated' => $event->updated,
+                    'created_by' => $event->created_by,
+                    'ordering_count' => $event->ordering_count,
+                    'title' => $event->title,
+                    'slug' => $event->slug,
+                    'start' => $event->start,
+                    'end' => $event->end,
+                    'details' => $event->description,
+                    'category_id' => $event->category_id,
+                    'image' => null,
+                    'location' => $event->location,
+                    'registration' => $event->registration,
+                    'limit' => $event->limit
+
+                );
+            }
+
+            if( ! empty($data)) $this->db->insert_batch('philsquare_events_manager_events', $data);
+
+            $data = array();
+            foreach ($categories as $category)
+            {
+                $data[] = array(
+
+                    'id' => $category->id,
+                    'created' => $category->created,
+                    'updated' => $category->updated,
+                    'created_by' => $category->created_by,
+                    'ordering_count' => $category->ordering_count,
+                    'title' => $category->category,
+                    'slug' => $category->category_slug,
+                    'description' => $category->description,
+                    'color_id' => $category->color_id,
+                    'image' => $category->category_image,
+
+                );
+            }
+
+            if( ! empty($data)) $this->db->insert_batch('philsquare_events_manager_categories', $data);
+
+            $data = array();
+            foreach ($colors as $color)
+            {
+                $data[] = array(
+
+                    'id' => $color->id,
+                    'created' => $color->created,
+                    'updated' => $color->updated,
+                    'created_by' => $color->created_by,
+                    'ordering_count' => $color->ordering_count,
+                    'title' => $color->color,
+                    'slug' => $color->color_slug,
+                    'hex' => $color->hex,
+
+                );
+            }
+
+            if( ! empty($data)) $this->db->insert_batch('philsquare_events_manager_colors', $data);
+
+            $data = array();
+            foreach ($registrations as $registration)
+            {
+                $data[] = array(
+
+                    'id' => $registration->id,
+                    'created' => $registration->created,
+                    'updated' => $registration->updated,
+                    'created_by' => $registration->created_by,
+                    'ordering_count' => $registration->ordering_count,
+                    'name' => $registration->name,
+                    'email' => $registration->email,
+                    'event_id' => $registration->event_id,
+
+                );
+            }
+
+            if( ! empty($data)) $this->db->insert_batch('philsquare_events_manager_registrations', $data);
+        }
 		
 		return true;
 	}
