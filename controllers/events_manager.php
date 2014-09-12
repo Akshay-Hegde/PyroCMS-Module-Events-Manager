@@ -16,16 +16,12 @@ class Events_manager extends Public_Controller
     public function __construct()
     {
         parent::__construct();
-
-		// Load lang
-        $this->lang->load('events_manager');
-
-		if($this->uri->segment(3) == '') redirect('events_manager/' . Settings::get('em_default_view'));
-    }
-
-	public function index()
-	{
 		
-	}
+        $this->load->model('events_manager_setting_model', 'setting');
+
+		$defaultView = $this->setting->get('default_view');
+
+		if($this->uri->segment(3) == '') redirect('events_manager/' . $defaultView);
+    }
 
 }

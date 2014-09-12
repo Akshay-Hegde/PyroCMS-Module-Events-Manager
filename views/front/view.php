@@ -1,7 +1,7 @@
 {{ event }}
 
 	<div class="event">
-		<h2>{{ title }}</h2>
+		<h1>{{ title }}</h1>
 		
 		<div class="date">
 			<span>{{ events_manager:display_timespan start=start end=end }}</span>
@@ -11,8 +11,8 @@
 			<span>{{ category_id:category }}</span>
 		</div>
 		
-		<div class="description">
-			{{ description }}
+		<div class="details">
+			{{ details }}
 		</div>
 	</div>
 	

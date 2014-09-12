@@ -23,26 +23,11 @@ class Admin_export extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('events_manager', 'export');
-
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set CP GUI table attr
-		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
+		role_or_die('philsquare_events_manager', 'export');
     }
 
 	public function index()
-	{
-		$this->template->title('Export Events to a CSV file');
-		
+	{		
 		// @todo add validation
 		if($_POST)
 		{
@@ -66,7 +51,7 @@ class Admin_export extends Admin_Controller
 			$this->load->dbutil();
 			$this->load->helper('download');
 			
-			$sql = "SELECT `title`, `start`, `end`, `description`, `location` FROM default_em_events WHERE start between '" . $from . "' AND '" . $to . "'";
+			$sql = "SELECT `title`, `start`, `end`, `details`, `location` FROM " . SITE_REF . "_philsquare_events_manager_events WHERE start between '" . $from . "' AND '" . $to . "'";
 
 			$query = $this->db->query($sql);
 			$data = $this->dbutil->csv_from_result($query);
@@ -87,6 +72,7 @@ class Admin_export extends Admin_Controller
 
 			// Set partials and boom!
 			$this->template
+				->title('Export Events to a CSV file')
 				->set_partial('contents', 'admin/export/filters')
 				->build('admin/tpl/container', $data);
 		}

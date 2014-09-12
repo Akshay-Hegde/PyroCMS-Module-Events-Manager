@@ -23,24 +23,13 @@ class Admin_categories extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('events_manager', 'categories');
-
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set CP GUI table attr
-		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
+		role_or_die('philsquare_events_manager', 'categories');
     }
 
-	public function index($offset = 0)
+	public function index()
 	{
+		$limit = Settings::get('records_per_page');
+		
 		$extra = array(
 			'title' => 'Categories',
 			
@@ -56,10 +45,17 @@ class Admin_categories extends Admin_Controller
 				)
 			),
 			
-			'columns' => array('category', 'color_id')
+			'columns' => array('title', 'color_id')
 		);
 		
-		$this->streams->cp->entries_table('categories', 'events_manager', 20, 'admin/events_manager/categories/index', true, $extra);
+		$this->streams->cp->entries_table(
+			'categories',
+			'philsquare_events_manager',
+			$limit,
+			'admin/events_manager/categories/index',
+			true,
+			$extra
+		);
 	}
 	
 	public function form($id = null)
@@ -69,12 +65,19 @@ class Admin_categories extends Admin_Controller
 			'title' => $id ? 'Edit Category' : 'Add Category'
 		);
 		
-		$this->streams->cp->entry_form('categories', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra);
+		$this->streams->cp->entry_form(
+			'categories',
+			'philsquare_events_manager',
+			$id ? 'edit' : 'new',
+			$id,
+			true,
+			$extra
+		);
 	}
 	
 	public function delete($id = 0)
 	{
-		$this->streams->entries->delete_entry($id, 'categories', 'events_manager');
+		$this->streams->entries->delete_entry($id, 'categories', 'philsquare_events_manager');
 		$this->session->set_flashdata('error', 'Category was deleted.');
 		redirect('admin/events_manager/categories');
 	}

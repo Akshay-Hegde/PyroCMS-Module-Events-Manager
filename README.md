@@ -2,11 +2,11 @@
 
 ## Overview
 
-This module was built because several of our clients needed a simple events manager. For this first release I am including features that accommodate all my current projects/clients in one module. I will continue to make updates and improve this module as needed.
+This module lets you create events and show them on your website in a calendar or list view.
 
 ### Requirements
 
-* PyroCMS version 2.2.3
+* PyroCMS version 2.2.x
 
 ### Installation
 
@@ -20,7 +20,7 @@ This module was built because several of our clients needed a simple events mana
 
 * __Events__
  * Add, edit and delete events
- * Events start with basic fields. These fields are title, start, end, description, location and category.
+ * Events start with basic fields. These fields are title, start, end, details, location, image and category.
  * Events can be displayed as a list or calendar view.
  * In the calendar mode, events can be listed on the days or the day can link to the list of events on that day (change in "Settings").
 * __Categories__
@@ -41,14 +41,14 @@ This module was built because several of our clients needed a simple events mana
  * Select whether the default view "/events_manager" should be the calendar or list
  * On the calendar decide whether to show a list of events on the days or just have the day link to a page that displays the event.
  * Enable/Disable registrations
- * This is cool for designers, set your custom calendar or list layout
+ * For designers, you can set your custom calendar or list layout.
 * __Goodies__
  * Plugin with 2 methods
  * Widget for displaying upcoming events
  * Events are index for searching in admin panel or the visitor's side
 * __Roles__
  * Restrict access to Categories, Custom Fields, Colors, Export and Settings
- * Unselecting "Can edit any event" will prevent users from editing and deleting events they did not create.
+ * Un-selecting "Can edit any event" will prevent users from editing and deleting events they did not create.
 
 ### Designers
 

@@ -23,97 +23,65 @@ class Admin extends Admin_Controller
     {
         parent::__construct();
 
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set CP GUI table attr
-		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
+        $this->load->model('events_manager_event_model', 'event');
+        $this->load->model('events_manager_setting_model', 'setting');
+        $this->load->model('events_manager_registration_model', 'registration');
     }
 
-	public function index($offset = 0)
+	public function index()
 	{
-		$data->events = array();
+        if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
+
+		$filters['month'] = $this->input->post('month');
+		$filters['year'] = $this->input->post('year');
 		
-		if($this->uri->segment(3) != 'index') redirect(current_url() . '/index');
-		
-		$this->template->title('Upcoming Events');
-		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'events_manager',
-			'limit' => Settings::get('records_per_page'),
-			'offset' => $offset,
-			'order_by' => 'start',
-			'sort' => 'asc',
-			'date_by' => 'start',
-			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_segment' => 4
-		);
-		
-		if($data->filters->month = ($this->input->post('submit') == 'Filter'))
+		if($filters['month'])
 		{
-			$data->filters->month = $this->input->post('month');
-			$params['month'] = $data->filters->month + 1;
-			$params['show_past'] = 'yes';
+			$events = $this->event->date($filters['year'], $filters['month'])->getAll();
 		}
 		
-		if($data->filters->year = ($this->input->post('submit') == 'Filter'))
+		else
 		{
-			$data->filters->year = $this->input->post('year');
-			$params['year'] = $data->filters->year + 2013;
-			$params['show_past'] = 'yes';
+			$events = $this->event->upcoming()->paginate(4)->getAll();
 		}
 		
-		$events = $this->streams->entries->get_entries($params);
+		$pagination = $events['pagination'];
 		
-		$data->pagination = $events['pagination'];
-		
-		foreach($events['entries'] as $event)
+		foreach($events['entries'] as $index => $event)
 		{
 			if($event['registration']['key'] == 'yes')
 			{
-				$params = array(
-					'stream' => 'registrations',
-					'namespace' => 'events_manager',
-					'where' => '`event_id` = ' . $event['id']
-				);
-				
-				$registrations = $this->streams->entries->get_entries($params);
+				$registrations = $this->registration->where('event_id', $event['id'])->getAll();
 				
 				$event['registration_count'] = $registrations['total'];
 			}
 			
-			$data->events[] = $event;
+			$events['entries'][$index] = $event;
 		}
-		
-		// Set partials and boom!
+
 		$this->template
+			->title('Upcoming Events')
 			->set_partial('filters', 'admin/events/filters')
 			->set_partial('contents', 'admin/events/list')
-			->build('admin/tpl/container', $data);
+			->build('admin/tpl/container', compact('filters', 'events', 'pagination'));
 	}
 	
 	public function form($id = null)
 	{
-		if($id && !group_has_role('events_manager', 'edit_all'))
+		if($id && ! $this->_canEdit($id))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
-			$user_id = $this->current_user->id;
+			$this->session->set_flashdata('error', 'You do not have permission to edit this event');
 			
-			if($event->created_by_user_id != $user_id)
-			{
-				$this->session->set_flashdata('error', 'You do not have permission to edit this event');
-				
-				redirect('admin/events_manager/index');
-			}
+			redirect('admin/events_manager/index');
+		}
+		
+		$fields = $this->streams->streams->get_assignments('events', 'philsquare_events_manager');
+		
+		$regFields = array('registration', 'limit');
+		
+		foreach($fields as $field)
+		{
+			if( ! in_array($field->field_slug, $regFields)) $genFields[] = $field->field_slug;
 		}
 		
 		$extra = array(
@@ -123,112 +91,101 @@ class Admin extends Admin_Controller
 		
 		$skips = array();
 		
-		if(Settings::get('em_allow_registrations') == 'no')
+		if($this->setting->get('allow_registrations') == 'no')
 		{
 			$skips = array('registration', 'limit');
+			$tabs = false;
 		}
-
-		$this->streams->cp->entry_form('events', 'events_manager', $id ? 'edit' : 'new', $id, true, $extra, $skips);
+		
+		else
+		{
+			$tabs = array(
+			    array(
+			        'title'     => "General Information",
+			        'id'        => 'general-tab',
+			        'fields'    => $genFields
+			    ),
+			    array(
+			        'title'     => "Registration",
+			        'id'        => 'additional-tab',
+			        'fields'    => $regFields
+			    )
+			);
+		}
+		
+		$this->streams->cp->entry_form(
+			'events',
+			'philsquare_events_manager',
+			$id ? 'edit' : 'new',
+			$id,
+			true,
+			$extra,
+			$skips,
+			$tabs
+		);
 	}
 	
 	public function delete($id = 0)
 	{
-		if(!group_has_role('events_manager', 'edit_all'))
+		if($id && ! $this->_canEdit($id))
 		{
-			$event = $this->streams->entries->get_entry($id, 'events', 'events_manager', false);
-			$user_id = $this->current_user->id;
+			$this->session->set_flashdata('error', 'You do not have permission to delete this event');
 			
-			if($event->created_by_user_id != $user_id)
-			{
-				$this->session->set_flashdata('error', 'You do not have permission to delete this event');
-				
-				redirect('admin/events_manager/index');
-			}
+			redirect('admin/events_manager/index');
 		}
 		
-		$this->load->model('search/search_index_m');
+		if($this->event->delete($id))
+		{
+			$this->session->set_flashdata('error', 'Event was deleted.');
+		}
 		
-		$this->streams->entries->delete_entry($id, 'events', 'events_manager');
-		$this->search_index_m->drop_index('events_manager', 'event', $id);
-		$this->session->set_flashdata('error', 'Event was deleted.');
+		else
+		{
+			$this->session->set_flashdata('error', 'Unable to delete event.');
+		}
+		
 		redirect('admin/events_manager');
 	}
 	
 	public function registrations($event_id)
 	{
-		$data->event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager', false);
-		
-		$params = array(
-			'stream' => 'registrations',
-			'namespace' => 'events_manager',
-			'where' => "`event_id` = '{$event_id}'"
-		);
-		
-		$data->registrants = $this->streams->entries->get_entries($params);
-		
+		$event = $this->event->get($event_id);
+		$registrants = $this->registration->where('event_id', $event_id)->getAll();
+
 		$this->template
-			->title('Registrants for ' . $data->event->title)
+			->title('Registrants for ' . $event->title)
 			->set_partial('contents', 'admin/registrants/list')
-			->build('admin/tpl/container', $data);
+			->build('admin/tpl/container', compact('event', 'registrants'));
 	}
 	
-	public function add_registrant($event_id)
-	{
-		$validation_rules = array(
-			array(
-				'field' => 'name',
-				'label' => 'Name',
-				'rules'	=> 'required|trim|max_length[100]'
-			),
-			array(
-				'field' => 'email',
-				'label' => 'Email',
-				'rules'	=> 'required|valid_email|max_length[255]'
-			)
+	public function add_registrant($eventId)
+	{		
+		$extra = array(
+			'return' => 'admin/events_manager/registrations/' . $eventId,
+			'title' => 'Add Registrant'
 		);
-
-		$this->form_validation->set_rules($validation_rules);
 		
-		if($this->form_validation->run())
-		{
-			$insert = array(
-				'name' => $this->input->post('name'),
-				'email' => $this->input->post('email'),
-				'event_id' => $event_id
-			);
-			
-			$result = $this->streams->entries->insert_entry($insert, 'registrations', 'events_manager');
-			
-			if($result)
-			{
-				// Success
-				$this->session->set_flashdata('success', 'Added registrant successfully');
-			}
-			else
-			{
-				// Failure adding answers
-				$this->session->set_flashdata('error', 'Unable to add registrant');
-			}
-			
-			redirect("admin/events_manager/registrations/$event_id");
-		}
-		else
-		{
-			$event = $this->streams->entries->get_entry($event_id, 'events', 'events_manager');
-
-			$this->template
-				->title('Add Registrant to ' . $event->title)
-				->set_partial('contents', 'admin/registrants/add')
-				->build('admin/tpl/container');
-		}
+		$skips = array();
+		
+		$this->streams->cp->entry_form(
+			'registrations',
+			'philsquare_events_manager',
+			'new',
+			null,
+			true,
+			$extra,
+			$skips,
+			false,
+			array('event_id'),
+			array('event_id' => $eventId)
+		);
 	}
 	
-	public function delete_registrant($registration_id)
+	public function delete_registrant($registrationId, $eventId)
 	{
-		$registration = $this->streams->entries->get_entry($registration_id, 'registrations', 'events_manager');
-		$result = $this->streams->entries->delete_entry($registration_id, 'registrations', 'events_manager');
+		$results = $this->registration->delete($registrationId);
 		
-		if($result)
+		if($results)
 		{
 			// Success
 			$this->session->set_flashdata('success', 'Registrant deleted');
@@ -239,6 +196,21 @@ class Admin extends Admin_Controller
 			$this->session->set_flashdata('error', 'There was an issue.');
 		}
 		
-		redirect("admin/events_manager/registrations/$registration->event_id");
+		redirect("admin/events_manager/registrations/$eventId");
+	}
+	
+	private function _canEdit($eventId)
+	{
+		if(group_has_role('philsquare_events_manager', 'edit_all')) return true;
+		
+		$event = $this->event->get($id);
+		$userId = $this->current_user->id;
+		
+		if($event->created_by_user_id == $userId)
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }

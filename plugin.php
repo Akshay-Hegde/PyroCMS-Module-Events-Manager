@@ -88,7 +88,7 @@ class Plugin_Events_manager extends Plugin
 		
 		$params = array(
 			'stream' => 'events',
-			'namespace' => 'events_manager',
+			'namespace' => 'philsquare_events_manager',
 			'limit' => $limit,
 			'order_by' => 'start',
 			'sort' => 'asc',

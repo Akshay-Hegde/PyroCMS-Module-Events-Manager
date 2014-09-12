@@ -23,24 +23,13 @@ class Admin_fields extends Admin_Controller
     {
         parent::__construct();
 
-		role_or_die('events_manager', 'custom_fields');
-
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Load assets
-		Asset::css('module::admin.css');
-		Asset::js('module::admin.js');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set CP GUI table attr
-		$this->table->set_template(array('table_open'  => '<table class="table-list" border="0" cellspacing="0">'));
+		role_or_die('philsquare_events_manager', 'custom_fields');
     }
 
 	public function index($offset = 0)
 	{
+		$limit = Settings::get('records_per_page');
+		
 		$extra = array(
 			'title' => 'Event Custom Fields',
 			
@@ -63,19 +52,35 @@ class Admin_fields extends Admin_Controller
 			'start',
 			'end',
 			'introduction',
-			'description',
-			'location',
+			'details',
 			'registration',
 			'limit',
 			'category_id'
 		);
 
-		$this->streams->cp->assignments_table('events', 'events_manager', 15, 'admin/events_manager/fields/index', true, $extra, $exclude);
+		$this->streams->cp->assignments_table(
+			'events',
+			'philsquare_events_manager',
+			$limit,
+			'admin/events_manager/fields/index',
+			true,
+			$extra,
+			$exclude
+		);
 	}
 	
 	public function form($assign_id = null)
 	{
-		$this->streams->cp->field_form('events', 'events_manager', $assign_id ? 'edit' : 'new', 'admin/events_manager/fields', $assign_id, array(), true, array());
+		$this->streams->cp->field_form(
+			'events',
+			'philsquare_events_manager',
+			$assign_id ? 'edit' : 'new',
+			'admin/events_manager/fields',
+			$assign_id,
+			array(),
+			true,
+			array()
+		);
 	}
 	
 	public function delete($assign_id)

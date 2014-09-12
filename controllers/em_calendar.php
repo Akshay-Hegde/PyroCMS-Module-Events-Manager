@@ -17,92 +17,59 @@ class Em_calendar extends Public_Controller
     {
         parent::__construct();
 
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Helpers
-		$this->load->helper('events');
-
 		// Load assets
-		Asset::css('module::admin.css');
+		Asset::css('module::style.css');
 		Asset::js('module::admin.js');
-		
-		// Templates use this lib
-		$this->load->library('table');
-		
-		// Set calendar
-		$this->table->set_template(array('table_open'  => '<table>'));
-		
-		// We always need the category list as a keyed array
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'events_manager',
-		);
 
-		$categories = $this->streams->entries->get_entries($params);
-		$this->categories = $categories['entries'];
-		$this->template->set('categories', $this->categories);
+        $this->load->model('events_manager_event_model', 'event');
+        $this->load->model('events_manager_setting_model', 'setting');
+        $this->load->model('events_manager_category_model', 'category');
+        $this->load->model('events_manager_color_model', 'color');
+
+		$categories = $this->category->getAll();
+		$this->template->set('categories', $categories['entries']);
     }
 	
 	public function index($year = null, $month = null, $day = null)
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
-
-		$this->template->title('Upcoming Events');
-		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'events_manager',
-			'order_by' => 'start',
-			'date_by' => 'start',
-			'month' => $month,
-			'year' => $year
-		);
+		$layout = $this->setting->get('calendar_layout');
 		
 		if($day)
-		{
-			// @todo format setting
-			$this->template->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)));
-			
-			$params['day'] = $day;
-			
-			$results = $this->streams->entries->get_entries($params);
+		{			
+			$results = $this->event->date($year, $month, $day)->getAll();
 			
 			// Need colors
 			// @todo DRY
 			foreach($results['entries'] as $event)
 			{
 				$id = $event['category_id']['color_id'];
+				
+				$color = $this->color->get($id);
 
-				$params = array(
-					'stream' => 'category_colors',
-					'namespace' => 'events_manager',
-					'where' => "`id` = '{$id}'"
-				);
-
-				$color = $this->streams->entries->get_entries($params);
-
-				$event['color_slug'] = $color['entries'][0]['color_slug'];
-				$event['hex'] = $color['entries'][0]['hex'];
+				$event['color_slug'] = $color->slug;
+				$event['hex'] = $color->hex;
 
 				$events[] = $event;
 			}
 
 			$this->template
+				->title('Events for ' . date('M j, Y', mktime(null, null, null, $month, $day, $year)))
 				->set('events', $events)
 				->build('front/list');
 		}
 		else
 		{
-			$results = $this->streams->entries->get_entries($params);
+			$results = $this->event->date($year, $month)->getAll();
 
 			$events = $results['entries'];
 
 			$data = $this->_build($events, $year, $month);
 
 			$this->template
-				->set_layout(Settings::get('em_calendar_layout'))
+				->title('Upcoming Events')
+				->set_layout($layout)
 				->build('front/calendar/view', $data);
 		}
 		
@@ -112,49 +79,37 @@ class Em_calendar extends Public_Controller
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
+		$layout = $this->setting->get('calendar_layout');
 		
-		// Exists?
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'events_manager',
-			'where' => "`category_slug` = '{$slug}'"
-		);
-
-		$results = $this->streams->entries->get_entries($params);
+		$category = $this->category->where('slug', $slug)->first();
 		
-		if($results['total'])
+		if($category)
 		{
-			$category = $results['entries'][0];
+			$this->template->title('Calendar Events listed as "' . $category['title'] . '"');
 			
-			$this->template->title('Calendar Events listed as "' . $category['category'] . '"');
-			$id = $category['id'];
-			
-			$params = array(
-				'stream' => 'events',
-				'namespace' => 'events_manager',
-				'order_by' => 'start',
-				'date_by' => 'start',
-				'month' => $month,
-				'year' => $year,
-				'where' => "`category_id` = '{$id}'"
-			);
-
-			$results = $this->streams->entries->get_entries($params);
+			$results = $this->event->where('category_id', $category['id'])
+				->date($year, $month)
+				->getAll();
 
 			$events = $results['entries'];
-			
-			$results = $this->streams->entries->get_entries($params);
+		}
+		
+		else
+		{
+			show_404();
 		}
 		
 		$data = $this->_build($events, $year, $month, $slug);
 		
 		$this->template
-			->set_layout(Settings::get('em_calendar_layout'))
+			->set_layout($layout)
 			->build('front/calendar/view', $data);
 	}
 	
 	private function _build($events, $year, $month, $category = null)
 	{
+		$dayOption = $this->setting->get('calendar_day_option');
+		
 		$event_list = array();
 		
 		// Assign events to keyed array ex. $var[4] = array(event1, event2, etc.)
@@ -165,31 +120,24 @@ class Em_calendar extends Public_Controller
 			$event_day = date('j', $event->start);
 			
 			// We need the color
-			$color_id = $event->category_id['color_id'];
+			$colorId = $event->category_id['color_id'];
 			
-			$params = array(
-				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
-				'where' => "`id` = '{$color_id}'"
-			);
-
-			$results = $this->streams->entries->get_entries($params);
-			$color = $results['entries'][0];
+			$color = $this->color->get($colorId);
 
 			$event_days[$event_day][] = array(
 				'title' => $event->title,
 				'start' => $event->start,
 				'end' => $event->end,
 				'slug' => $event->slug,
-				'color_slug' => $color['color_slug'],
-				'hex' => $color['hex'],
+				'color_slug' => $color->slug,
+				'hex' => $color->hex,
 				'event' => (array) $event
 			);
 		}
 		
 		if(isset($event_days))
 		{
-			if(Settings::get('em_calendar_day_option') == 'list')
+			if($dayOption == 'list')
 			{
 				foreach($event_days as $day => $event)
 				{
@@ -206,8 +154,6 @@ class Em_calendar extends Public_Controller
 			{
 				foreach($event_days as $day => $event)
 				{
-					echo '<pre>'; print_r($event_days[$day]); die();
-					
 					$cell = $this->template
 						->set_layout(null)
 						->set('events', array($event_days[$day][0]))

@@ -17,53 +17,32 @@ class Em_events extends Public_Controller
     {
         parent::__construct();
 
-		// Load lang
-        $this->lang->load('events_manager');
-
-		// Helpers
-		$this->load->helper('events');
-
 		// Load assets
 		Asset::css('module::admin.css');
 		Asset::js('module::admin.js');
 		
 		// Templates use this lib
 		$this->load->library('table');
-		
+
+        $this->load->model('events_manager_event_model', 'event');
+        $this->load->model('events_manager_setting_model', 'setting');
+        $this->load->model('events_manager_category_model', 'category');
+        $this->load->model('events_manager_color_model', 'color');
+        $this->load->model('events_manager_registration_model', 'registration');
+
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
 		
-		// We always need the category list as a keyed array
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'events_manager',
-		);
-
-		$categories = $this->streams->entries->get_entries($params);
-		$this->categories = $categories['entries'];
-		$this->template->set('categories', $this->categories);
+		$categories = $this->category->getAll();
+		$this->template->set('categories', $categories['entries']);
     }
 
 	public function index()
 	{
 		$events = array();
+		$layout = $this->setting->get('list_layout');
 		
-		$this->template->title('Upcoming Events');
-		
-		$params = array(
-			'stream' => 'events',
-			'namespace' => 'events_manager',
-			'limit' => Settings::get('records_per_page'),
-			'order_by' => 'start',
-			'sort' => 'asc',
-			'date_by' => 'start',
-			'show_past' => 'no',
-			'paginate' => 'yes',
-			'pag_base' => site_url('events_manager/events/page'),
-			'pag_segment' => 4
-		);
-		
-		$results = $this->streams->entries->get_entries($params);
+		$results = $this->event->paginate(3)->upcoming()->getAll();
 		
 		// Need colors
 		// @todo DRY
@@ -71,24 +50,19 @@ class Em_events extends Public_Controller
 		{
 			$id = $event['category_id']['color_id'];
 			
-			$params = array(
-				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
-				'where' => "`id` = '{$id}'"
-			);
-
-			$color = $this->streams->entries->get_entries($params);
+			$color = $this->color->get($id);
 			
-			$event['color_slug'] = $color['entries'][0]['color_slug'];
-			$event['hex'] = $color['entries'][0]['hex'];
+			$event['color_slug'] = $color->slug;
+			$event['hex'] = $color->hex;
 			
 			$events[] = $event;
 		}
 		
 		$this->template
+			->title('Upcoming Events')
 			->set('pagination', $results['pagination'])
 			->set('events', $events)
-			->set_layout(Settings::get('em_list_layout'))
+			->set_layout($layout)
 			->build('front/list');
 	}
 	
@@ -96,36 +70,19 @@ class Em_events extends Public_Controller
 	{
 		$events = array();
 		
-		// Exists?
-		$params = array(
-			'stream' => 'categories',
-			'namespace' => 'events_manager',
-			'where' => "`category_slug` = '{$slug}'"
-		);
-
-		$results = $this->streams->entries->get_entries($params);
+		$category = $this->category->where('slug', $slug)->first();
 		
-		if($results['total'])
+		if($category)
 		{
-			$category = $results['entries'][0];
-			
-			$params = array(
-				'stream' => 'events',
-				'namespace' => 'events_manager',
-				'limit' => Settings::get('records_per_page'),
-				'order_by' => 'start',
-				'sort' => 'asc',
-				'date_by' => 'start',
-				'show_past' => 'no',
-				'paginate' => 'yes',
-				'pag_segment' => 5
-			);
-
-			$this->template->title('Upcoming Events listed as "' . $category['category'] . '"');
-			$id = $category['id'];
-			$params['where'] = "`category_id` = '{$id}'";
-
-			$results = $this->streams->entries->get_entries($params);
+			$results = $this->event
+				->where('category_id', $category['id'])
+				->paginate(5)
+				->getAll();
+		}
+		
+		else
+		{
+			show_404();
 		}
 		
 		// Need colors
@@ -133,21 +90,16 @@ class Em_events extends Public_Controller
 		{
 			$id = $event['category_id']['color_id'];
 			
-			$params = array(
-				'stream' => 'category_colors',
-				'namespace' => 'events_manager',
-				'where' => "`id` = '{$id}'"
-			);
-
-			$color = $this->streams->entries->get_entries($params);
+			$color = $this->color->get($id);
 			
-			$event['color_slug'] = $color['entries'][0]['color_slug'];
-			$event['hex'] = $color['entries'][0]['hex'];
+			$event['color_slug'] = $color->slug;
+			$event['hex'] = $color->hex;
 			
 			$events[] = $event;
 		}
 		
 		$this->template
+			->title('Upcoming Events listed as "' . $category['title'] . '"')
 			->set('pagination', $results['pagination'])
 			->set('events', $events)
 			->build('front/list');
@@ -156,52 +108,19 @@ class Em_events extends Public_Controller
 	public function event($year, $month, $day, $slug)
 	{
 		// @todo Should we hope they don't have identical slugs on the same day?
-
-		$this->template->title('Event');
 		
-		$params = array(
-			'stream'    => 'events',
-			'namespace' => 'events_manager',
-			'limit'     => 1,
-			'date_by'   => 'start',
-			'where'     => "`slug` = '{$slug}'",
-			'year'      => $year,
-			'month'     => $month,
-			'day'       => $day
-		);
-		
-		$results = $this->streams->entries->get_entries($params);
-
-		list($event) = $results['entries']; // echo '<pre>'; print_r($event); die();
+		$event = $this->event
+			->date($year, $month, $day)
+			->where('slug', $slug)
+			->first();
 		
 		if($event['registration']['key'] == 'yes')
 		{
-			$params = array(
-				'stream' => 'registrations',
-				'namespace' => 'events_manager',
-				'where' => "`event_id` = " . $event['id']
-			);
-			
-			$registrations = $this->streams->entries->get_entries($params);
+			$registrations = $this->registration->where('event_id', $event['id'])->getAll();
 			
 			if($registrations['total'] < $event['limit'])
-			{
-				$validation_rules = array(
-					array(
-						'field' => 'name',
-						'label' => 'Name',
-						'rules'	=> 'required'
-					),
-					array(
-						'field' => 'email',
-						'label' => 'Email',
-						'rules'	=> 'valid_email|required'
-					)
-				);
-
-				$this->form_validation->set_rules($validation_rules);
-
-				if($this->form_validation->run())
+			{				
+				if($this->form_validation->run('add-registrant'))
 				{
 					$name = $this->input->post('name');
 					$email = $this->input->post('email');
@@ -227,8 +146,7 @@ class Em_events extends Public_Controller
 							'email' => $email
 						);
 						
-						// @todo Add verification
-						$insert = $this->streams->entries->insert_entry($entry, 'registrations', 'events_manager');
+						$insert = $this->registration->insert($entry);
 						
 						if($insert)
 						{
@@ -264,6 +182,7 @@ class Em_events extends Public_Controller
 		else
 		{
 			$this->template
+				->title('Event')
 				->set('event', array($event))
 				->build('front/view');
 		}
