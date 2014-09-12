@@ -2,11 +2,11 @@
 
 ## Overview
 
-This module was built because several of our clients needed a simple events manager. For this first release I am including features that accommodate all my current projects/clients in one module. I will continue to make updates and improve this module as needed.
+This module lets you create events and show them on your website in a calendar or list view.
 
 ### Requirements
 
-* PyroCMS version 2.2.3
+* PyroCMS version 2.2.x
 
 ### Installation
 
