@@ -1,6 +1,6 @@
 <?php if(isset($template['partials']['filters'])) echo $template['partials']['filters'] ?>
 
-<?php if(count($events)): ?>
+<?php if($events['total']): ?>
 	
 	<table>
 		<thead>

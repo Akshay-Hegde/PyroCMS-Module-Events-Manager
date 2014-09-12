@@ -154,8 +154,6 @@ class Em_calendar extends Public_Controller
 			{
 				foreach($event_days as $day => $event)
 				{
-					// echo '<pre>'; print_r($event_days[$day]); die();
-					
 					$cell = $this->template
 						->set_layout(null)
 						->set('events', array($event_days[$day][0]))
