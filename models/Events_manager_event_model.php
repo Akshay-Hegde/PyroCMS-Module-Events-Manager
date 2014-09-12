@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Event extends BaseModel {
+class Events_manager_event_model extends Events_manager_base_model {
 	
 	protected $stream = 'events';
 	

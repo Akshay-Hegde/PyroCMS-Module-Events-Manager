@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class BaseModel extends StreamModel {
+class Events_manager_base_model extends Philsquare_stream_model {
 	
 	protected $namespace = 'philsquare_events_manager';
 	

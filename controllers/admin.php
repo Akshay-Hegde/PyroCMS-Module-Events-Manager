@@ -22,8 +22,10 @@ class Admin extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
-		
-		$this->load->model(array('modulesetting', 'registration'));
+
+        $this->load->model('events_manager_event_model', 'event');
+        $this->load->model('events_manager_setting_model', 'setting');
+        $this->load->model('events_manager_registration_model', 'registration');
     }
 
 	public function index()
@@ -89,7 +91,7 @@ class Admin extends Admin_Controller
 		
 		$skips = array();
 		
-		if($this->modulesetting->get('allow_registrations') == 'no')
+		if($this->setting->get('allow_registrations') == 'no')
 		{
 			$skips = array('registration', 'limit');
 			$tabs = false;

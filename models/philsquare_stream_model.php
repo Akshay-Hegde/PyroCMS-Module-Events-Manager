@@ -2,7 +2,7 @@
 
 // v1.0.2
 
-class StreamModel {
+class Philsquare_stream_model {
 	
 	/**
 	 * Stream Name
@@ -173,6 +173,11 @@ class StreamModel {
 	 * @var int
 	 */
 	protected $cache_expires;
+
+    public function __construct()
+    {
+        $this->ci =& get_instance();
+    }
 
 	/*
 	| -------------------------------------------------------------------

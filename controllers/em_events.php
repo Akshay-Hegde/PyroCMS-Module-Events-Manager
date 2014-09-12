@@ -23,9 +23,13 @@ class Em_events extends Public_Controller
 		
 		// Templates use this lib
 		$this->load->library('table');
-		
-		$this->load->model(array('modulesetting', 'category', 'color', 'registration'));
-		
+
+        $this->load->model('events_manager_event_model', 'event');
+        $this->load->model('events_manager_setting_model', 'setting');
+        $this->load->model('events_manager_category_model', 'category');
+        $this->load->model('events_manager_color_model', 'color');
+        $this->load->model('events_manager_registration_model', 'registration');
+
 		// Set calendar
 		$this->table->set_template(array('table_open'  => '<table>'));
 		
@@ -36,7 +40,7 @@ class Em_events extends Public_Controller
 	public function index()
 	{
 		$events = array();
-		$layout = $this->modulesetting->get('list_layout');
+		$layout = $this->setting->get('list_layout');
 		
 		$results = $this->event->paginate(3)->upcoming()->getAll();
 		

@@ -1,8 +1,8 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Registration extends BaseModel {
+class Events_manager_color_model extends Events_manager_base_model {
 	
-	protected $stream = 'registrations';
+	protected $stream = 'colors';
 	
 	public function __construct()
 	{
