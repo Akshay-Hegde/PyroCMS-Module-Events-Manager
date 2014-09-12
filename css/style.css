@@ -1,0 +1,26 @@
+#calendar {
+    width: 100%;
+}
+
+#calendar td {
+    width: 14%;
+}
+
+#calendar td > div {
+    min-height: 140px;
+    position: relative;
+    padding-top: 22px;
+    padding-bottom: 28px;
+    background-color: #e8e8e8;
+}
+
+#calendar td > div .day-num {
+    position: absolute;
+    top: 4px;
+    left: 8px;
+}
+
+#calendar td > div a {
+    display: block;
+    padding: 0px 5px;
+}

@@ -560,9 +560,13 @@ class Module_Events_manager extends Module {
                 'list_layout' => $this->settings->get('em_list_layout') ?: 'default.html'
             );
 
-            // Uninstall and Re-install
+            // Uninstall and re-install
             $this->streams->utilities->remove_namespace('events_manager');
             $this->install();
+
+            // Update search index with new namespace/module name
+            $data = array('module' => 'philsquare_events_manager');
+            $this->db->where('module', 'events_manager')->update('search_index', $data);
 
             // Delete default cat and col
             $this->db->truncate('philsquare_events_manager_categories');
@@ -572,6 +576,7 @@ class Module_Events_manager extends Module {
 
             $this->db->delete('settings', array('module' => 'events_manager'));
 
+            $data = array();
             foreach($events as $event)
             {
                 $data[] = array(
@@ -655,6 +660,8 @@ class Module_Events_manager extends Module {
             }
 
             if( ! empty($data)) $this->db->insert_batch('philsquare_events_manager_registrations', $data);
+
+            $old_version == '1.0.3';
         }
 		
 		return true;

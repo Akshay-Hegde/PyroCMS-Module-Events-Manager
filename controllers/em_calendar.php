@@ -18,7 +18,7 @@ class Em_calendar extends Public_Controller
         parent::__construct();
 
 		// Load assets
-		Asset::css('module::admin.css');
+		Asset::css('module::style.css');
 		Asset::js('module::admin.js');
 
         $this->load->model('events_manager_event_model', 'event');

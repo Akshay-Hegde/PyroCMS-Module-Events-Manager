@@ -9,22 +9,26 @@
 </ul>
 
 {{ if events }}
-	<table class="table">
-		<tr>
-			<th>Date</th>
-			<th>Event</th>
-			<th>Location</th>
-		</tr>
-	
-		{{ events }}
-	
-		<tr>
-			<td>{{ events_manager:display_timespan start=start end=end }}</td>
-			<td><a href="{{ url:site }}events_manager/event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}" style="color: #{{ hex }};">{{ title }}</a></td>
-			<td>{{ location }}</td>
-		</tr>
-	
-		{{ /events }}
+	<table class="uk-table uk-table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Event</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {{ events }}
+
+            <tr>
+                <td>{{ events_manager:display_timespan start=start end=end }}</td>
+                <td><a href="{{ url:site }}events_manager/event{{ helper:date format="/Y/m/d/" timestamp=start }}{{ slug }}" style="color: #{{ hex }};">{{ title }}</a></td>
+                <td>{{ location }}</td>
+            </tr>
+
+            {{ /events }}
+        </tbody>
 	</table>
 	
 	{{ pagination }}
