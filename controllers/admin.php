@@ -90,8 +90,10 @@ class Admin extends Admin_Controller
 		);
 		
 		$skips = array();
+
+        $settings = $this->setting->get(1);
 		
-		if($this->setting->get('allow_registrations') == 'no')
+		if($settings->allow_registrations == 'no')
 		{
 			$skips = array('registration', 'limit');
 			$tabs = false;

@@ -10,12 +10,7 @@ class Events_manager_event_model extends Events_manager_base_model {
 	
 	protected $date_by = 'start';
 	
-	public function __construct()
-	{
-		$this->ci =& get_instance();
-	}
-	
-	public function delete()
+	public function delete($id)
 	{
 		$this->ci->load->model('search/search_index_m');
 		$this->ci->search_index_m->drop_index($this->namespace, 'event', $id);

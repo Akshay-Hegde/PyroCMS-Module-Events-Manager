@@ -2,7 +2,7 @@
 
 class Module_Events_manager extends Module {
 
-	public $version = '1.0.3';
+	public $version = '1.0.5';
 
 	public function info()
 	{

@@ -21,10 +21,10 @@ class Em_calendar extends Public_Controller
 		Asset::css('module::style.css');
 		Asset::js('module::admin.js');
 
-        $this->load->model('events_manager_event_model', 'event');
         $this->load->model('events_manager_setting_model', 'setting');
         $this->load->model('events_manager_category_model', 'category');
         $this->load->model('events_manager_color_model', 'color');
+        $this->load->model('events_manager_event_model', 'event');
 
 		$categories = $this->category->getAll();
 		$this->template->set('categories', $categories['entries']);
@@ -34,7 +34,8 @@ class Em_calendar extends Public_Controller
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
-		$layout = $this->setting->get('calendar_layout');
+		$settings = $this->setting->get(1);
+        $layout = $settings->calendar_layout;
 		
 		if($day)
 		{			
@@ -79,8 +80,9 @@ class Em_calendar extends Public_Controller
 	{
 		$month = $month ? $month : date('n');
 		$year = $year ? $year : date('Y');
-		$layout = $this->setting->get('calendar_layout');
-		
+		$settings = $this->setting->get(1);
+        $layout = $settings->calendar_layout;
+
 		$category = $this->category->where('slug', $slug)->first();
 		
 		if($category)
@@ -108,7 +110,8 @@ class Em_calendar extends Public_Controller
 	
 	private function _build($events, $year, $month, $category = null)
 	{
-		$dayOption = $this->setting->get('calendar_day_option');
+        $settings = $this->setting->get(1);
+		$dayOption = $settings->calendar_day_option;
 		
 		$event_list = array();
 		

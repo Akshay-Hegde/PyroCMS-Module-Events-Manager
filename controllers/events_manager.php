@@ -19,9 +19,9 @@ class Events_manager extends Public_Controller
 		
         $this->load->model('events_manager_setting_model', 'setting');
 
-		$defaultView = $this->setting->get('default_view');
+		$settings = $this->setting->get(1);
 
-		if($this->uri->segment(3) == '') redirect('events_manager/' . $defaultView);
+		if($this->uri->segment(2) == '') redirect('events_manager/' . $settings->default_view);
     }
 
 }
