@@ -47,7 +47,7 @@ class Module_Events_manager extends Module {
 		// Add section only if they have permission
 		if (function_exists('group_has_role'))
 		{
-			if(group_has_role('philsquare_events_manager', 'categories'))
+			if(group_has_role('events_manager', 'categories'))
 			{
 				$info['sections']['categories'] = array(
 					'name' 	=> 'events_manager:categories:title',
@@ -62,7 +62,7 @@ class Module_Events_manager extends Module {
 				);
 			}
 			
-			if(group_has_role('philsquare_events_manager', 'custom_fields'))
+			if(group_has_role('events_manager', 'custom_fields'))
 			{
 				$info['sections']['custom_fields'] = array(
 					'name' 	=> 'events_manager:custom_fields:title',
@@ -77,7 +77,7 @@ class Module_Events_manager extends Module {
 				);
 			}
 			
-			if(group_has_role('philsquare_events_manager', 'colors'))
+			if(group_has_role('events_manager', 'colors'))
 			{
 				$info['sections']['colors'] = array(
 					'name' 	=> 'events_manager:colors:title',
@@ -92,7 +92,7 @@ class Module_Events_manager extends Module {
 				);
 			}
 			
-			if(group_has_role('philsquare_events_manager', 'export'))
+			if(group_has_role('events_manager', 'export'))
 			{
 				$info['sections']['export'] = array(
 					'name' 	=> 'events_manager:export:title',
@@ -100,7 +100,7 @@ class Module_Events_manager extends Module {
 				);
 			}
 			
-			if(group_has_role('philsquare_events_manager', 'settings'))
+			if(group_has_role('events_manager', 'settings'))
 			{
 				$info['sections']['settings'] = array(
 					'name' 	=> 'events_manager:settings:title',

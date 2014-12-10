@@ -203,7 +203,7 @@ class Admin extends Admin_Controller
 	
 	private function _canEdit($eventId)
 	{
-		if(group_has_role('philsquare_events_manager', 'edit_all')) return true;
+		if(group_has_role('events_manager', 'edit_all')) return true;
 		
 		$event = $this->event->get($id);
 		$userId = $this->current_user->id;
