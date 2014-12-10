@@ -40,7 +40,8 @@ class Em_events extends Public_Controller
 	public function index()
 	{
 		$events = array();
-		$layout = $this->setting->get('list_layout');
+		$settings = $this->setting->get(1);
+        $layout = $settings->list_layout;
 		
 		$results = $this->event->paginate(3)->upcoming()->getAll();
 		

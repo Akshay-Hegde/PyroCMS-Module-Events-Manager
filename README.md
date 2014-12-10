@@ -1,4 +1,4 @@
-# PryoCMS Module - Events Manager
+# PyroCMS Module - Events Manager
 
 ## Overview
 

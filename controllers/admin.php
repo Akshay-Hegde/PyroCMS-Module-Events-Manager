@@ -90,8 +90,10 @@ class Admin extends Admin_Controller
 		);
 		
 		$skips = array();
+
+        $settings = $this->setting->get(1);
 		
-		if($this->setting->get('allow_registrations') == 'no')
+		if($settings->allow_registrations == 'no')
 		{
 			$skips = array('registration', 'limit');
 			$tabs = false;
@@ -201,7 +203,7 @@ class Admin extends Admin_Controller
 	
 	private function _canEdit($eventId)
 	{
-		if(group_has_role('philsquare_events_manager', 'edit_all')) return true;
+		if(group_has_role('events_manager', 'edit_all')) return true;
 		
 		$event = $this->event->get($id);
 		$userId = $this->current_user->id;
